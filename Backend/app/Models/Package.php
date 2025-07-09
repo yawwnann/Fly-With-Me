@@ -10,6 +10,7 @@ class Package extends Model
         'name',
         'description',
         'price',
+        'features',
     ];
 
     public function orders()
