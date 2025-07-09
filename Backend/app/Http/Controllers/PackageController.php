@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Package;
 use Illuminate\Http\Response;
 
@@ -13,6 +14,9 @@ class PackageController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->role !== 'admin') {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
         $packages = Package::all();
         return response()->json($packages);
     }
@@ -30,6 +34,9 @@ class PackageController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::user()->role !== 'admin') {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -44,6 +51,9 @@ class PackageController extends Controller
      */
     public function show($id)
     {
+        if (Auth::user()->role !== 'admin') {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
         $package = Package::findOrFail($id);
         return response()->json($package);
     }
@@ -61,6 +71,9 @@ class PackageController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (Auth::user()->role !== 'admin') {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
         $package = Package::findOrFail($id);
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
@@ -76,6 +89,9 @@ class PackageController extends Controller
      */
     public function destroy($id)
     {
+        if (Auth::user()->role !== 'admin') {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
         $package = Package::findOrFail($id);
         $package->delete();
         return response()->json(['message' => 'Package deleted successfully.']);
