@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PortfolioVideo;
 use Illuminate\Http\Response;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Cloudinary\Cloudinary;
 
 class PortfolioVideoController extends Controller
 {
@@ -36,8 +36,24 @@ class PortfolioVideoController extends Controller
             'video' => 'required|file|mimetypes:video/mp4,video/avi,video/mpeg,video/quicktime|max:51200', // max 50MB
         ]);
 
-        // Upload ke Cloudinary (sebagai video)
-        $uploadedFileUrl = Cloudinary::uploadVideo($request->file('video')->getRealPath())->getSecurePath();
+        // Upload ke Cloudinary via SDK
+        try {
+            $cloudinary = new Cloudinary([
+                'cloud' => [
+                    'cloud_name' => config('services.cloudinary.cloud_name'),
+                    'api_key' => config('services.cloudinary.api_key'),
+                    'api_secret' => config('services.cloudinary.api_secret'),
+                ],
+            ]);
+            $result = $cloudinary->uploadApi()->upload($request->file('video')->getRealPath(), [
+                'folder' => 'portfolios',
+                'resource_type' => 'video',
+            ]);
+            $uploadedFileUrl = $result['secure_url'];
+        } catch (\Exception $e) {
+            \Log::error('Cloudinary video upload failed: ' . $e->getMessage());
+            return response()->json(['error' => 'Cloudinary video upload failed', 'message' => $e->getMessage()], 500);
+        }
 
         $video = PortfolioVideo::create([
             'portfolio_id' => $validated['portfolio_id'],

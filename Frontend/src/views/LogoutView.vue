@@ -9,6 +9,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import api from '../api'
+import { useRouter } from 'vue-router'
 
 const message = ref('')
 
@@ -17,7 +18,7 @@ const logout = async () => {
     await api.post('/logout')
     localStorage.removeItem('token')
     message.value = 'Logout berhasil!'
-    // Redirect ke login jika perlu
+    router.push('/login') // Redirect ke halaman login
   } catch (e: any) {
     message.value = 'Logout gagal!'
   }

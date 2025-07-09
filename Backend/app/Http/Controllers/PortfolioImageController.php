@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PortfolioImage;
 use Illuminate\Http\Response;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Cloudinary\Cloudinary;
 
 class PortfolioImageController extends Controller
 {
@@ -31,18 +31,47 @@ class PortfolioImageController extends Controller
      */
     public function store(Request $request)
     {
+        \Log::info('PortfolioImageController@store called', $request->all());
         $validated = $request->validate([
             'portfolio_id' => 'required|integer|exists:portfolios,id',
             'image' => 'required|file|image|max:5120', // max 5MB
         ]);
 
-        // Upload ke Cloudinary
-        $uploadedFileUrl = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
+        if (!$request->hasFile('image')) {
+            \Log::error('No image uploaded');
+            return response()->json(['error' => 'No image uploaded'], 400);
+        }
+
+        $file = $request->file('image');
+        if (!$file->isValid()) {
+            \Log::error('Invalid image upload');
+            return response()->json(['error' => 'Invalid image upload'], 400);
+        }
+
+        try {
+            \Log::info('Uploading to Cloudinary via SDK...');
+            $cloudinary = new Cloudinary([
+                'cloud' => [
+                    'cloud_name' => config('services.cloudinary.cloud_name'),
+                    'api_key' => config('services.cloudinary.api_key'),
+                    'api_secret' => config('services.cloudinary.api_secret'),
+                ],
+            ]);
+            $result = $cloudinary->uploadApi()->upload($file->getRealPath(), [
+                'folder' => 'portfolios'
+            ]);
+            $uploadedFileUrl = $result['secure_url'];
+            \Log::info('Cloudinary upload success', ['url' => $uploadedFileUrl]);
+        } catch (\Exception $e) {
+            \Log::error('Cloudinary upload failed: ' . $e->getMessage());
+            return response()->json(['error' => 'Cloudinary upload failed', 'message' => $e->getMessage()], 500);
+        }
 
         $image = PortfolioImage::create([
             'portfolio_id' => $validated['portfolio_id'],
             'image_url' => $uploadedFileUrl,
         ]);
+        \Log::info('PortfolioImage created', ['id' => $image->id, 'url' => $uploadedFileUrl]);
         return response()->json($image, 201);
     }
 

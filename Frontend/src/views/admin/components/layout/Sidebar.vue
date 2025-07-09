@@ -139,9 +139,6 @@
                     />
                   </svg>
                   <span class="font-medium">Orders</span>
-                  <span class="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full"
-                    >3</span
-                  >
                 </router-link>
               </li>
               <li>
@@ -257,6 +254,7 @@
             </div>
             <button
               class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-600 transition-colors text-slate-400 hover:text-white"
+              @click="handleLogout"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -276,7 +274,21 @@
 
 <script setup lang="ts">
 import { useCounterStore } from '@/stores/counter'
+import { useRouter } from 'vue-router'
+import axios from 'axios'
+
+const router = useRouter() // <-- tambahkan inisialisasi router
 
 const store = useCounterStore()
 const toggleSidebar = () => {}
+
+const handleLogout = async () => {
+  try {
+    await axios.post('/api/logout')
+  } catch (e) {
+    // ignore error
+  }
+  localStorage.removeItem('token')
+  router.push('/login')
+}
 </script>

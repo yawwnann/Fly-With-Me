@@ -13,7 +13,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::all();
+        $orders = Order::with('package')->get();
         return response()->json($orders);
     }
 
@@ -95,5 +95,70 @@ class OrderController extends Controller
         $order = Order::findOrFail($id);
         $order->delete();
         return response()->json(['message' => 'Order deleted successfully.']);
+    }
+
+    // Statistik order per bulan (12 bulan terakhir)
+    public function ordersPerMonth()
+    {
+        $orders = Order::selectRaw('YEAR(date) as year, MONTH(date) as month, COUNT(*) as total')
+            ->where('date', '>=', now()->subMonths(11)->startOfMonth())
+            ->groupBy('year', 'month')
+            ->orderBy('year')
+            ->orderBy('month')
+            ->get();
+
+        // Siapkan array 12 bulan terakhir
+        $labels = [];
+        $data = [];
+        for ($i = 11; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $labels[] = $date->format('M');
+            $found = $orders->first(fn($o) => $o->year == $date->year && $o->month == $date->month);
+            $data[] = $found ? (int) $found->total : 0;
+        }
+        return response()->json([
+            'labels' => $labels,
+            'data' => $data,
+        ]);
+    }
+
+    // Statistik dashboard lengkap
+    public function dashboardStats()
+    {
+        $total_users = \App\Models\User::count();
+        $total_orders = \App\Models\Order::count();
+        $total_packages = \App\Models\Package::count();
+        $total_portfolios = \App\Models\Portfolio::count();
+
+        $latest_orders = \App\Models\Order::orderBy('created_at', 'desc')->take(5)->get();
+        $latest_users = \App\Models\User::orderBy('created_at', 'desc')->take(5)->get();
+
+        $notifications = [
+            [
+                'type' => 'order',
+                'message' => 'Order baru masuk',
+                'time' => '5 menit yang lalu',
+            ],
+            [
+                'type' => 'user',
+                'message' => 'User baru mendaftar',
+                'time' => '10 menit yang lalu',
+            ],
+            [
+                'type' => 'payment',
+                'message' => 'Pembayaran diterima',
+                'time' => '30 menit yang lalu',
+            ],
+        ];
+
+        return response()->json([
+            'total_users' => $total_users,
+            'total_orders' => $total_orders,
+            'total_packages' => $total_packages,
+            'total_portfolios' => $total_portfolios,
+            'latest_orders' => $latest_orders,
+            'latest_users' => $latest_users,
+            'notifications' => $notifications,
+        ]);
     }
 }
