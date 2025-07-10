@@ -2,11 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AdminLayout from '../views/admin/layouts/app-layout.vue'
 import AdminDashboard from '../views/admin/AdminDashboard.vue'
-import UserDashboard from '../views/user/UserDashboard.vue'
+import { UserDashboard, Portfolio, Orders, Profile } from '../views/user/index'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import LogoutView from '../views/LogoutView.vue'
-import Orders from '../views/admin/Orders.vue'
+import AdminOrders from '../views/admin/Orders.vue'
 import Portfolios from '../views/admin/Portfolios.vue'
 import Users from '../views/admin/Users.vue'
 import Packages from '../views/admin/Packages.vue'
@@ -38,7 +38,7 @@ const router = createRouter({
         {
           path: 'orders',
           name: 'admin-orders',
-          component: Orders,
+          component: AdminOrders,
         },
         {
           path: 'portfolios',
@@ -71,6 +71,26 @@ const router = createRouter({
       path: '/user',
       name: 'user',
       component: UserDashboard,
+    },
+    {
+      path: '/user/dashboard',
+      name: 'UserDashboard',
+      component: UserDashboard,
+    },
+    {
+      path: '/user/portfolios',
+      name: 'UserPortfolio',
+      component: Portfolio,
+    },
+    {
+      path: '/user/orders',
+      name: 'UserOrders',
+      component: Orders,
+    },
+    {
+      path: '/user/profile',
+      name: 'UserProfile',
+      component: Profile,
     },
     {
       path: '/login',

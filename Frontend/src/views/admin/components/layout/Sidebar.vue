@@ -1,5 +1,21 @@
 <template>
   <div>
+    <!-- Tombol buka sidebar (desktop)
+    <button
+      v-if="!store.sidebar"
+      class="fixed top-6 left-2 z-[60] flex items-center justify-center w-10 h-10 rounded-full bg-slate-800 text-white hover:bg-emerald-600 shadow-lg transition-all duration-300 lg:flex"
+      @click="store.toggleSidebar()"
+      aria-label="Open sidebar"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        />
+      </svg>
+    </button> -->
     <!-- Header for Mobile/Tablet -->
     <header class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white shadow-lg border-b">
       <div class="flex items-center justify-between px-4 py-3">
@@ -45,7 +61,13 @@
 
     <!-- Sidebar -->
     <nav
-      class="sidebar fixed min-h-screen h-full top-0 bottom-0 w-[280px] shadow-xl z-50 transition-all duration-300 bg-gradient-to-b from-slate-900 to-slate-800 lg:translate-x-0"
+      class="sidebar fixed min-h-screen h-full top-0 bottom-0 w-[280px] shadow-xl z-50 transition-all duration-300 bg-gradient-to-b from-slate-900 to-slate-800"
+      :class="[
+        store.sidebar ? 'translate-x-0' : '-translate-x-full',
+        'lg:translate-x-0',
+        'lg:block',
+        'block',
+      ]"
     >
       <div class="h-full flex flex-col">
         <!-- Header Section -->
@@ -66,9 +88,9 @@
               <span class="text-xs text-slate-400">Dashboard Panel</span>
             </div>
           </router-link>
-          <button
-            class="lg:hidden w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-700 transition-colors duration-200 text-slate-400 hover:text-white"
-            @click="toggleSidebar()"
+          <!-- <button
+            class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-700 transition-colors duration-200 text-slate-400 hover:text-white lg:flex"
+            @click="store.toggleSidebar()"
             aria-label="Close sidebar"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,7 +101,7 @@
                 d="M6 18L18 6M6 6l12 12"
               />
             </svg>
-          </button>
+          </button> -->
         </div>
 
         <!-- Navigation Menu -->

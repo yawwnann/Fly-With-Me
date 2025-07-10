@@ -8,5 +8,11 @@ export const useCounterStore = defineStore('counter', () => {
     count.value++
   }
 
-  return { count, doubleCount, increment }
+  // Sidebar state
+  const sidebar = ref(false)
+  function toggleSidebar() {
+    sidebar.value = !sidebar.value
+  }
+
+  return { count, doubleCount, increment, sidebar, toggleSidebar }
 })
