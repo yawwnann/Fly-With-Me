@@ -2,7 +2,7 @@
   <section class="relative w-full py-20 bg-gray-50 text-gray-900 overflow-hidden">
     <div class="mx-auto max-w-6xl px-4">
       <h2
-        class="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent"
+        class="text-4xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent"
       >
         Apa Kata Klien Kami?
       </h2>

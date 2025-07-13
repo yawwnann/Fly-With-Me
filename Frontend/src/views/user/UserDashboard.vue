@@ -1,7 +1,7 @@
 <template>
   <MainHeader />
   <div class="min-h-screen flex flex-col items-center justify-start">
-    <div class="relative w-full h-[60vh] flex items-center justify-center">
+    <div class="relative w-full h-[60vh] flex items-center justify-center" data-aos="fade-down">
       <!-- Background Gambar Dinamis -->
       <img :src="slides[current].image" alt="Banner" class="w-full h-full object-cover shadow" />
       <!-- Overlay gelap -->
@@ -30,7 +30,7 @@
       </div>
     </div>
     <!-- Section Layanan/Paket -->
-    <section class="w-full py-16 bg-gray-50 flex flex-col items-center">
+    <section class="w-full py-16 bg-gray-50 flex flex-col items-center" data-aos="fade-up">
       <h2 class="text-4xl font-bold mb-4 text-center">Pilih Paket Layanan Kami</h2>
       <p class="text-lg text-gray-500 mb-12 text-center">
         Paket jasa drone, fotografi, dan videografi profesional untuk kebutuhan Anda
@@ -74,6 +74,8 @@
           :key="packageItem.id"
           class="bg-white rounded-2xl shadow-xl p-12 flex-1 flex flex-col items-center border relative"
           :class="[packageItem.is_popular ? 'border-4 border-blue-500' : 'border-gray-200']"
+          data-aos="fade-up"
+          :data-aos-delay="index * 100"
         >
           <!-- Popular Badge -->
           <span
@@ -117,12 +119,14 @@
       </div>
     </section>
     <!-- Section Keunggulan -->
-    <section class="w-full py-16 bg-gray-50 flex flex-col items-center">
-      <h2 class="text-3xl font-bold mb-8 text-center">Kenapa Memilih Kami?</h2>
+    <section class="w-full py-16 bg-gray-50 flex flex-col items-center" data-aos="fade-up">
+      <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Kenapa Memilih Kami?</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-7xl">
         <!-- Card Keunggulan 1 -->
         <div
           class="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center text-center border border-gray-100 hover:shadow-2xl transition"
+          data-aos="zoom-in"
+          :data-aos-delay="0"
         >
           <div class="mb-4">
             <UserCheckIcon class="w-12 h-12 text-blue-600" />
@@ -135,6 +139,8 @@
         <!-- Card Keunggulan 2 -->
         <div
           class="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center text-center border border-gray-100 hover:shadow-2xl transition"
+          data-aos="zoom-in"
+          :data-aos-delay="100"
         >
           <div class="mb-4">
             <CameraIcon class="w-12 h-12 text-blue-600" />
@@ -147,6 +153,8 @@
         <!-- Card Keunggulan 3 -->
         <div
           class="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center text-center border border-gray-100 hover:shadow-2xl transition"
+          data-aos="zoom-in"
+          :data-aos-delay="200"
         >
           <div class="mb-4">
             <RocketIcon class="w-12 h-12 text-blue-600" />
@@ -159,6 +167,8 @@
         <!-- Card Keunggulan 4 -->
         <div
           class="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center text-center border border-gray-100 hover:shadow-2xl transition"
+          data-aos="zoom-in"
+          :data-aos-delay="300"
         >
           <div class="mb-4">
             <HeadphonesIcon class="w-12 h-12 text-blue-600" />
@@ -173,6 +183,7 @@
     <!-- Section Portfolio/Galeri -->
     <section
       class="w-full py-20 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden"
+      data-aos="fade-up"
     >
       <!-- Background decorative elements -->
       <div class="absolute inset-0 opacity-5">
@@ -188,7 +199,7 @@
         <!-- Header Section -->
         <div class="text-center mb-16">
           <h2
-            class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent mb-6"
+            class="text-4xl md:text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent mb-6"
           >
             Portfolio & Galeri
           </h2>
@@ -244,10 +255,12 @@
             :key="item.id"
             class="group cursor-pointer transform transition-all duration-500 hover:scale-105"
             @click="openPortfolio(item)"
+            data-aos="fade-up"
+            :data-aos-delay="0"
           >
             <!-- Modern Card Design -->
             <div
-              class="relative bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100"
+              class="relative bg-white rounded-3xl overflow-hidden shadow-xl transition-all duration-500 border border-gray-100"
             >
               <!-- Main Image -->
               <div class="relative h-80 overflow-hidden">
@@ -261,7 +274,7 @@
                 <!-- Floating Badge -->
                 <div class="absolute top-4 left-4">
                   <div
-                    class="bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg"
+                    class="bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1.5 rounded-full text-xs font-semibold"
                   >
                     Portfolio
                   </div>
@@ -277,26 +290,24 @@
 
                 <!-- Hover Overlay -->
                 <div
-                  class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300"
+                  class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center"
                 >
-                  <div class="absolute inset-0 flex items-center justify-center">
-                    <div
-                      class="bg-white/20 backdrop-blur-sm rounded-full p-4 transform scale-0 group-hover:scale-100 transition-transform duration-300"
+                  <div
+                    class="rounded-full p-4 transform scale-0 group-hover:scale-100 transition-transform duration-300"
+                  >
+                    <svg
+                      class="w-8 h-8 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      <svg
-                        class="w-8 h-8 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
-                        ></path>
-                      </svg>
-                    </div>
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+                      ></path>
+                    </svg>
                   </div>
                 </div>
               </div>
@@ -355,273 +366,26 @@
                   </button>
                 </div>
               </div>
-
-              <!-- Decorative Element -->
-              <div
-                class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-bl-full"
-              ></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Modal Portfolio Detail -->
-      <div
-        v-if="selectedPortfolio"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
-        @click="closePortfolio"
-      >
-        <div
-          class="bg-white rounded-3xl max-w-6xl w-full max-h-[95vh] overflow-hidden relative shadow-2xl transform transition-all duration-300 scale-95 opacity-0"
-          :class="{ 'scale-100 opacity-100': selectedPortfolio }"
-          @click.stop
-        >
-          <!-- Modal Header -->
-          <div
-            class="sticky top-0 bg-white backdrop-blur-sm border-b border-gray-200 p-6 flex items-center justify-between z-10"
-          >
-            <div class="flex items-center gap-4">
-              <div class="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center">
-                <svg
-                  class="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  ></path>
-                </svg>
-              </div>
-              <div>
-                <h3 class="text-2xl font-bold text-gray-800">{{ selectedPortfolio.title }}</h3>
-                <p class="text-gray-600 mt-1 flex items-center gap-2">
-                  <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
-                  Portfolio Detail
-                </p>
-              </div>
-            </div>
-            <button
-              @click="closePortfolio"
-              class="w-12 h-12 rounded-2xl bg-gray-100 hover:bg-red-50 flex items-center justify-center transition-all duration-300 group hover:scale-110"
-            >
-              <svg
-                class="w-6 h-6 text-gray-600 group-hover:text-red-500 transition-colors"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                ></path>
-              </svg>
-            </button>
-          </div>
-
-          <!-- Modal Content -->
-          <div class="overflow-y-auto max-h-[calc(95vh-120px)]">
-            <div class="p-8">
-              <!-- Description Section -->
-              <div class="mb-10 bg-gray-50 rounded-3xl p-6 border border-gray-200">
-                <div class="flex items-start gap-4">
-                  <div
-                    class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0"
-                  >
-                    <svg
-                      class="w-4 h-4 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 class="text-lg font-semibold text-gray-800 mb-2">Deskripsi Project</h4>
-                    <p class="text-gray-700 leading-relaxed text-base">
-                      {{
-                        selectedPortfolio.description ||
-                        'Dokumentasi aerial berkualitas tinggi dengan teknologi drone terbaru.'
-                      }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Images Grid -->
-              <div class="mb-10">
-                <div class="flex items-center gap-3 mb-6">
-                  <div class="w-10 h-10 bg-blue-500 rounded-2xl flex items-center justify-center">
-                    <svg
-                      class="w-5 h-5 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 class="text-xl font-bold text-gray-800">Galeri Foto</h4>
-                    <p class="text-gray-600 text-sm">
-                      {{ selectedPortfolio.images?.length || 0 }} foto tersedia
-                    </p>
-                  </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div
-                    v-for="(img, index) in selectedPortfolio.images"
-                    :key="img.id"
-                    class="group cursor-pointer relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-                  >
-                    <img
-                      :src="optimizeCloudinary(img.image_url)"
-                      class="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110"
-                      loading="lazy"
-                      :alt="`${selectedPortfolio.title} - Foto ${index + 1}`"
-                    />
-                    <div
-                      class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    >
-                      <div class="absolute bottom-4 left-4 right-4">
-                        <div class="bg-white/90 backdrop-blur-sm rounded-xl p-3">
-                          <p class="text-sm font-medium text-gray-800">Foto {{ index + 1 }}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white px-2 py-1 rounded-full text-xs font-medium"
-                    >
-                      {{ index + 1 }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Videos Section -->
-              <div v-if="selectedPortfolio.videos && selectedPortfolio.videos.length" class="mb-6">
-                <div class="flex items-center gap-3 mb-6">
-                  <div class="w-10 h-10 bg-purple-500 rounded-2xl flex items-center justify-center">
-                    <svg
-                      class="w-5 h-5 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 class="text-xl font-bold text-gray-800">Video Portfolio</h4>
-                    <p class="text-gray-600 text-sm">
-                      {{ selectedPortfolio.videos?.length || 0 }} video tersedia
-                    </p>
-                  </div>
-                </div>
-
-                <div class="grid grid-cols-1 gap-6">
-                  <div
-                    v-for="(vid, index) in selectedPortfolio.videos"
-                    :key="vid.id"
-                    class="relative rounded-2xl overflow-hidden shadow-xl bg-gray-900"
-                  >
-                    <div class="aspect-video">
-                      <video
-                        :src="vid.video_url"
-                        class="w-full h-full object-cover rounded-2xl"
-                        controls
-                        preload="metadata"
-                        :poster="optimizeCloudinary(selectedPortfolio.images[0]?.image_url)"
-                      />
-                    </div>
-                    <div
-                      class="absolute top-4 left-4 bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-sm font-medium"
-                    >
-                      Video {{ index + 1 }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Footer Actions -->
-              <div class="mt-10 pt-6 border-t border-gray-200">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-4 text-sm text-gray-600">
-                    <div class="flex items-center gap-2">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        ></path>
-                      </svg>
-                      <span
-                        >Total:
-                        {{
-                          (selectedPortfolio.images?.length || 0) +
-                          (selectedPortfolio.videos?.length || 0)
-                        }}
-                        media</span
-                      >
-                    </div>
-                  </div>
-                  <button
-                    @click="closePortfolio"
-                    class="flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-2xl font-medium hover:bg-blue-600 transition-all duration-300 hover:scale-105"
-                  >
-                    <span>Tutup</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
     <!-- Section Testimonial -->
-    <section class="w-full bg-gray-50 py-20 flex flex-col items-center">
+    <section class="w-full bg-gray-50 py-20 flex flex-col items-center" data-aos="fade-up">
       <TestimonialCarousel />
     </section>
 
     <!-- FAQ Section -->
-    <FAQAccordion />
+    <FAQAccordion data-aos="fade-up" />
   </div>
   <MainFooter />
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import AOS from 'aos'
 import MainHeader from '@/components/ui/MainHeader.vue'
 import MainFooter from '@/components/ui/MainFooter.vue'
 import {
@@ -698,6 +462,9 @@ const fetchPackages = async () => {
     packages.value = []
   } finally {
     loadingPackages.value = false
+    nextTick(() => {
+      AOS.refresh()
+    })
   }
 }
 
@@ -750,15 +517,11 @@ function optimizeCloudinary(url: string) {
     : url
 }
 
+const router = useRouter()
 const activeImage = ref<{ [key: number]: number }>({})
-const selectedPortfolio = ref<any | null>(null)
 
 function openPortfolio(item: any) {
-  selectedPortfolio.value = item
-}
-
-function closePortfolio() {
-  selectedPortfolio.value = null
+  router.push({ name: 'UserPortfolioDetail', params: { id: item.id } })
 }
 
 onMounted(() => {

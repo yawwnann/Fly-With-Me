@@ -12,6 +12,7 @@ import Users from '../views/admin/Users.vue'
 import Packages from '../views/admin/Packages.vue'
 import Analytics from '../views/admin/Analytics.vue'
 import OrdersNew from '../views/admin/OrdersNew.vue'
+import PortfolioDetail from '../views/user/PortfolioDetail.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -81,6 +82,11 @@ const router = createRouter({
       path: '/user/portfolios',
       name: 'UserPortfolio',
       component: Portfolio,
+    },
+    {
+      path: '/user/portfolio/:id',
+      name: 'UserPortfolioDetail',
+      component: PortfolioDetail,
     },
     {
       path: '/user/orders',
