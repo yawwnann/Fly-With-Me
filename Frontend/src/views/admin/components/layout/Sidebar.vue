@@ -1,36 +1,19 @@
 <template>
   <div>
-    <!-- Tombol buka sidebar (desktop)
-    <button
-      v-if="!store.sidebar"
-      class="fixed top-6 left-2 z-[60] flex items-center justify-center w-10 h-10 rounded-full bg-slate-800 text-white hover:bg-emerald-600 shadow-lg transition-all duration-300 lg:flex"
-      @click="store.toggleSidebar()"
-      aria-label="Open sidebar"
-    >
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        />
-      </svg>
-    </button> -->
     <!-- Header for Mobile/Tablet -->
-    <header class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white shadow-lg border-b">
+    <header
+      class="lg:hidden fixed top-0 left-0 right-0 z-50 shadow-lg border-b"
+      style="background: var(--color-bg-card); border-color: var(--color-border)"
+    >
       <div class="flex items-center justify-between px-4 py-3">
         <div class="flex items-center gap-3">
           <button
-            class="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors duration-200"
+            class="w-10 h-10 flex items-center justify-center rounded-lg transition-colors duration-200"
+            style="background: var(--color-bg-main)"
             @click="toggleSidebar()"
             aria-label="Toggle sidebar"
           >
-            <svg
-              class="w-5 h-5 text-slate-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -45,13 +28,18 @@
               alt="FlyWithUs Logo"
               class="h-8 w-8 object-contain"
             />
-            <span class="text-xl font-bold text-slate-800">ADMIN</span>
+            <span class="text-xl font-bold" style="color: var(--color-text-main)">ADMIN</span>
           </router-link>
         </div>
         <div class="flex items-center gap-4">
-          <span class="text-sm text-slate-600 hidden sm:block">Dashboard Panel</span>
+          <span class="text-sm hidden sm:block" style="color: var(--color-text-secondary)"
+            >Dashboard Panel</span
+          >
           <div class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center">
+            <div
+              class="w-8 h-8 rounded-full flex items-center justify-center"
+              style="background: var(--color-primary)"
+            >
               <span class="text-white font-semibold text-xs">AD</span>
             </div>
           </div>
@@ -61,7 +49,11 @@
 
     <!-- Sidebar -->
     <nav
-      class="sidebar fixed min-h-screen h-full top-0 bottom-0 w-[280px] shadow-xl z-50 transition-all duration-300 bg-gradient-to-b from-slate-900 to-slate-800"
+      class="sidebar fixed min-h-screen h-full top-0 bottom-0 w-[280px] shadow-xl z-50 transition-all duration-300"
+      :style="{
+        background: 'var(--color-bg-main)',
+        color: 'var(--color-text-main)',
+      }"
       :class="[
         store.sidebar ? 'translate-x-0' : '-translate-x-full',
         'lg:translate-x-0',
@@ -71,7 +63,10 @@
     >
       <div class="h-full flex flex-col">
         <!-- Header Section -->
-        <div class="flex items-center justify-between px-6 py-6 border-b border-slate-700">
+        <div
+          class="flex items-center justify-between px-6 py-6 border-b"
+          style="border-color: var(--color-border); background: var(--color-bg-card)"
+        >
           <router-link to="/" class="flex items-center gap-3 group">
             <div class="relative">
               <img
@@ -80,34 +75,28 @@
                 class="h-12 w-12 object-contain rounded-lg bg-white p-2 shadow-md group-hover:scale-105 transition-transform duration-200"
               />
               <div
-                class="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-slate-900"
+                class="absolute -top-1 -right-1 w-4 h-4 rounded-full border-2"
+                style="background: var(--color-primary); border-color: var(--color-bg-main)"
               ></div>
             </div>
             <div class="flex flex-col">
-              <span class="text-xl font-bold tracking-wide text-white">ADMIN</span>
-              <span class="text-xs text-slate-400">Dashboard Panel</span>
+              <span class="text-xl font-bold tracking-wide" style="color: var(--color-text-main)"
+                >ADMIN</span
+              >
+              <span class="text-xs" style="color: var(--color-text-secondary)"
+                >Dashboard Panel</span
+              >
             </div>
           </router-link>
-          <!-- <button
-            class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-700 transition-colors duration-200 text-slate-400 hover:text-white lg:flex"
-            @click="store.toggleSidebar()"
-            aria-label="Close sidebar"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button> -->
         </div>
 
         <!-- Navigation Menu -->
         <div class="flex-1 px-4 py-6">
           <div class="mb-6">
-            <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-3">
+            <h3
+              class="text-xs font-semibold uppercase tracking-wider mb-3 px-3"
+              style="color: var(--color-text-secondary)"
+            >
               Main Menu
             </h3>
             <ul class="space-y-2">
@@ -115,9 +104,21 @@
                 <router-link
                   to="/admin"
                   :exact="true"
-                  class="group flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-700/50 transition-all duration-200 text-slate-300 hover:text-white"
-                  exact-active-class="bg-emerald-600 text-white shadow-lg"
-                  active-class="text-white shadow-lg"
+                  class="group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 hover:scale-105"
+                  :style="{
+                    color: $route.path === '/admin' ? 'white' : 'var(--color-text-secondary)',
+                    background: $route.path === '/admin' ? 'var(--color-primary)' : 'transparent',
+                  }"
+                  @mouseover="
+                    $event.target.style.background =
+                      $route.path === '/admin'
+                        ? 'var(--color-primary-hover)'
+                        : 'var(--color-bg-card)'
+                  "
+                  @mouseleave="
+                    $event.target.style.background =
+                      $route.path === '/admin' ? 'var(--color-primary)' : 'transparent'
+                  "
                 >
                   <svg
                     class="w-5 h-5 group-hover:scale-110 transition-transform"
@@ -144,8 +145,23 @@
               <li>
                 <router-link
                   to="/admin/orders"
-                  class="group flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-700/50 transition-all duration-200 text-slate-300 hover:text-white"
-                  active-class="bg-emerald-600 text-white shadow-lg"
+                  class="group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 hover:scale-105"
+                  :style="{
+                    color:
+                      $route.path === '/admin/orders' ? 'white' : 'var(--color-text-secondary)',
+                    background:
+                      $route.path === '/admin/orders' ? 'var(--color-primary)' : 'transparent',
+                  }"
+                  @mouseover="
+                    $event.target.style.background =
+                      $route.path === '/admin/orders'
+                        ? 'var(--color-primary-hover)'
+                        : 'var(--color-bg-card)'
+                  "
+                  @mouseleave="
+                    $event.target.style.background =
+                      $route.path === '/admin/orders' ? 'var(--color-primary)' : 'transparent'
+                  "
                 >
                   <svg
                     class="w-5 h-5 group-hover:scale-110 transition-transform"
@@ -166,8 +182,23 @@
               <li>
                 <router-link
                   to="/admin/portfolios"
-                  class="group flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-700/50 transition-all duration-200 text-slate-300 hover:text-white"
-                  active-class="bg-emerald-600 text-white shadow-lg"
+                  class="group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 hover:scale-105"
+                  :style="{
+                    color:
+                      $route.path === '/admin/portfolios' ? 'white' : 'var(--color-text-secondary)',
+                    background:
+                      $route.path === '/admin/portfolios' ? 'var(--color-primary)' : 'transparent',
+                  }"
+                  @mouseover="
+                    $event.target.style.background =
+                      $route.path === '/admin/portfolios'
+                        ? 'var(--color-primary-hover)'
+                        : 'var(--color-bg-card)'
+                  "
+                  @mouseleave="
+                    $event.target.style.background =
+                      $route.path === '/admin/portfolios' ? 'var(--color-primary)' : 'transparent'
+                  "
                 >
                   <svg
                     class="w-5 h-5 group-hover:scale-110 transition-transform"
@@ -188,8 +219,22 @@
               <li>
                 <router-link
                   to="/admin/users"
-                  class="group flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-700/50 transition-all duration-200 text-slate-300 hover:text-white"
-                  active-class="bg-emerald-600 text-white shadow-lg"
+                  class="group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 hover:scale-105"
+                  :style="{
+                    color: $route.path === '/admin/users' ? 'white' : 'var(--color-text-secondary)',
+                    background:
+                      $route.path === '/admin/users' ? 'var(--color-primary)' : 'transparent',
+                  }"
+                  @mouseover="
+                    $event.target.style.background =
+                      $route.path === '/admin/users'
+                        ? 'var(--color-primary-hover)'
+                        : 'var(--color-bg-card)'
+                  "
+                  @mouseleave="
+                    $event.target.style.background =
+                      $route.path === '/admin/users' ? 'var(--color-primary)' : 'transparent'
+                  "
                 >
                   <svg
                     class="w-5 h-5 group-hover:scale-110 transition-transform"
@@ -210,8 +255,23 @@
               <li>
                 <router-link
                   to="/admin/packages"
-                  class="group flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-slate-700/50 transition-all duration-200 text-slate-300 hover:text-white"
-                  active-class="bg-emerald-600 text-white shadow-lg"
+                  class="group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 hover:scale-105"
+                  :style="{
+                    color:
+                      $route.path === '/admin/packages' ? 'white' : 'var(--color-text-secondary)',
+                    background:
+                      $route.path === '/admin/packages' ? 'var(--color-primary)' : 'transparent',
+                  }"
+                  @mouseover="
+                    $event.target.style.background =
+                      $route.path === '/admin/packages'
+                        ? 'var(--color-primary-hover)'
+                        : 'var(--color-bg-card)'
+                  "
+                  @mouseleave="
+                    $event.target.style.background =
+                      $route.path === '/admin/packages' ? 'var(--color-primary)' : 'transparent'
+                  "
                 >
                   <svg
                     class="w-5 h-5 group-hover:scale-110 transition-transform"
@@ -230,12 +290,18 @@
 
           <!-- Quick Actions -->
           <div class="mb-6">
-            <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-3">
+            <h3
+              class="text-xs font-semibold uppercase tracking-wider mb-3 px-3"
+              style="color: var(--color-text-secondary)"
+            >
               Quick Actions
             </h3>
             <div class="space-y-2">
               <button
-                class="w-full flex items-center gap-3 py-2 px-4 rounded-lg hover:bg-slate-700/50 transition-all duration-200 text-slate-300 hover:text-white text-sm"
+                class="w-full flex items-center gap-3 py-2 px-4 rounded-lg transition-all duration-200 text-sm hover:scale-105"
+                style="color: var(--color-text-secondary)"
+                @mouseover="$event.target.style.background = 'var(--color-bg-card)'"
+                @mouseleave="$event.target.style.background = 'transparent'"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -248,7 +314,10 @@
                 <span>New Order</span>
               </button>
               <button
-                class="w-full flex items-center gap-3 py-2 px-4 rounded-lg hover:bg-slate-700/50 transition-all duration-200 text-slate-300 hover:text-white text-sm"
+                class="w-full flex items-center gap-3 py-2 px-4 rounded-lg transition-all duration-200 text-sm hover:scale-105"
+                style="color: var(--color-text-secondary)"
+                @mouseover="$event.target.style.background = 'var(--color-bg-card)'"
+                @mouseleave="$event.target.style.background = 'transparent'"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -265,18 +334,27 @@
         </div>
 
         <!-- Footer Section -->
-        <div class="p-4 border-t border-slate-700">
-          <div class="flex items-center gap-3 p-3 rounded-lg bg-slate-700/50">
-            <div class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center">
+        <div class="p-4 border-t" style="border-color: var(--color-border)">
+          <div
+            class="flex items-center gap-3 p-3 rounded-lg"
+            style="background: var(--color-bg-card)"
+          >
+            <div
+              class="w-10 h-10 rounded-full flex items-center justify-center"
+              style="background: var(--color-primary)"
+            >
               <span class="text-white font-semibold text-sm">AD</span>
             </div>
             <div class="flex-1">
-              <p class="text-white text-sm font-medium">Admin User</p>
-              <p class="text-slate-400 text-xs">admin@flywithus.com</p>
+              <p class="text-sm font-medium" style="color: var(--color-text-main)">Admin User</p>
+              <p class="text-xs" style="color: var(--color-text-secondary)">admin@flywithus.com</p>
             </div>
             <button
-              class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-600 transition-colors text-slate-400 hover:text-white"
+              class="w-8 h-8 flex items-center justify-center rounded-full transition-colors"
+              style="color: var(--color-text-secondary)"
               @click="handleLogout"
+              @mouseover="$event.target.style.background = 'var(--color-bg-main)'"
+              @mouseleave="$event.target.style.background = 'transparent'"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -299,8 +377,7 @@ import { useCounterStore } from '@/stores/counter'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
-const router = useRouter() // <-- tambahkan inisialisasi router
-
+const router = useRouter()
 const store = useCounterStore()
 const toggleSidebar = () => {}
 

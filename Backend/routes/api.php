@@ -8,6 +8,7 @@ use App\Http\Controllers\PortfolioImageController;
 use App\Http\Controllers\PortfolioVideoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
 
 // Hapus route '/' karena API tidak perlu view
 
@@ -28,3 +29,6 @@ Route::patch('/users/{id}', [UserController::class, 'update']);
 Route::delete('/users/{id}', [UserController::class, 'destroy']);
 Route::get('/orders-per-month', [\App\Http\Controllers\OrderController::class, 'ordersPerMonth']);
 Route::get('/dashboard-stats', [\App\Http\Controllers\OrderController::class, 'dashboardStats']);
+Route::middleware('auth:api')->get('/me', function (Request $request) {
+    return $request->user();
+});

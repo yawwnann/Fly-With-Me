@@ -110,4 +110,17 @@ const router = createRouter({
   ],
 })
 
+// Navigation Guard untuk proteksi route admin
+router.beforeEach((to, from, next) => {
+  // Cek jika route mengandung /admin
+  if (to.path.startsWith('/admin')) {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      // Jika belum login, redirect ke login
+      return next({ path: '/login' })
+    }
+  }
+  next()
+})
+
 export default router

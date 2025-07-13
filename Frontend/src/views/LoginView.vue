@@ -1,34 +1,88 @@
 <template>
-  <div class="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-    <div class="bg-white p-8 rounded shadow w-full max-w-sm">
-      <h1 class="text-2xl font-bold mb-6 text-center">Login</h1>
-      <form @submit.prevent="login" class="space-y-4">
+  <div class="min-h-screen flex items-center justify-center bg-[#232136] px-2 py-8">
+    <div
+      class="w-full max-w-4xl bg-[#2a273f] rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden min-h-[520px]"
+    >
+      <!-- Left Side: Image & Text -->
+      <div class="hidden md:flex flex-col justify-between w-1/2 bg-[#232136] p-8 relative flex-1">
+        <img
+          src="@/assets/login.jpg"
+          alt="Login"
+          class="absolute inset-0 w-full h-full object-cover opacity-70"
+        />
+        <div class="relative z-10 flex flex-col h-full justify-between">
+          <div class="flex justify-between items-center">
+            <span class="text-white text-2xl font-bold tracking-widest">FLYWITHUS</span>
+          </div>
+          <div class="flex-1 flex flex-col justify-center items-center">
+            <h2 class="text-white text-2xl font-semibold mb-2 text-center drop-shadow">
+              Capturing Moments,<br />Creating Memories
+            </h2>
+          </div>
+        </div>
+      </div>
+      <!-- Right Side: Login Form -->
+      <div class="w-full md:w-1/2 bg-[#2a273f] p-8 flex flex-col justify-between flex-1 py-16">
         <div>
-          <label class="block mb-1 font-medium">Email:</label>
+          <h2 class="text-3xl font-bold text-white mb-6">Welcome back</h2>
+          <p class="text-sm text-white/60 mb-10">
+            Don't have an account?
+            <router-link to="/register" class="text-purple-400 hover:underline"
+              >Sign up</router-link
+            >
+          </p>
+        </div>
+        <form @submit.prevent="login" class="space-y-4 flex-1 flex flex-col justify-center">
           <input
             v-model="email"
             type="email"
+            placeholder="Email"
             required
-            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
+            class="w-full bg-[#232136] text-white border border-[#393552] rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
-        </div>
-        <div>
-          <label class="block mb-1 font-medium">Password:</label>
           <input
             v-model="password"
             type="password"
+            placeholder="Enter your password"
             required
-            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
+            class="w-full bg-[#232136] text-white border border-[#393552] rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
-        </div>
-        <button
-          type="submit"
-          class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-        >
-          Login
-        </button>
-      </form>
-      <div v-if="error" class="text-red-500 mt-4 text-center">{{ error }}</div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <input id="remember" type="checkbox" class="accent-purple-500 mr-2" />
+              <label for="remember" class="text-xs text-white/70">Remember me</label>
+            </div>
+            <a href="#" class="text-xs text-purple-400 hover:underline">Forgot password?</a>
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 rounded-lg transition mt-8 flex items-center justify-center"
+            :disabled="loading"
+          >
+            <span v-if="loading" class="flex items-center gap-2">
+              <svg
+                class="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+              </svg>
+              Loading...
+            </span>
+            <span v-else>Sign in</span>
+          </button>
+          <div v-if="error" class="text-red-400 mt-4 text-center">{{ error }}</div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -41,18 +95,27 @@ import api from '../api'
 const email = ref('')
 const password = ref('')
 const error = ref('')
+const loading = ref(false)
 const router = useRouter()
 
 const login = async () => {
   error.value = ''
+  loading.value = true
   try {
     const res = await api.post('/login', {
       email: email.value,
       password: password.value,
     })
     localStorage.setItem('token', res.data.token)
+
+    // Fetch user data setelah login
+    const userRes = await api.get('/me', {
+      headers: { Authorization: `Bearer ${res.data.token}` },
+    })
+    localStorage.setItem('user_data', JSON.stringify(userRes.data))
+
     // Redirect sesuai role
-    const role = res.data.user.role
+    const role = userRes.data.role
     if (role === 'admin') {
       router.push('/admin')
     } else {
@@ -60,6 +123,8 @@ const login = async () => {
     }
   } catch (e: any) {
     error.value = e.response?.data?.error || 'Login gagal'
+  } finally {
+    loading.value = false
   }
 }
 </script>
