@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto">
       <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 class="text-4xl font-bold text-gray-800 mb-2">Portfolios</h1>
+          <h1 class="text-4xl font-bold text-gray-800 mb-2">Portfolio</h1>
           <p class="text-gray-600 text-lg">Kelola portofolio hasil pekerjaan drone Anda</p>
         </div>
         <button

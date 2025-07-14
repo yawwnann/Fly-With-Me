@@ -17,18 +17,32 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->post('logout', [AuthController::class, 'logout']);
 
-Route::apiResource('packages', PackageController::class);
-Route::apiResource('orders', OrderController::class);
-Route::apiResource('portfolios', PortfolioController::class);
-Route::apiResource('portfolio-images', PortfolioImageController::class);
-Route::apiResource('portfolio-videos', PortfolioVideoController::class);
-Route::get('/users', [UserController::class, 'index']);
-Route::post('/users', [UserController::class, 'store']);
-Route::put('/users/{id}', [UserController::class, 'update']);
-Route::patch('/users/{id}', [UserController::class, 'update']);
-Route::delete('/users/{id}', [UserController::class, 'destroy']);
-Route::get('/orders-per-month', [\App\Http\Controllers\OrderController::class, 'ordersPerMonth']);
-Route::get('/dashboard-stats', [\App\Http\Controllers\OrderController::class, 'dashboardStats']);
+// Public routes
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+
+// Protected routes
+Route::middleware('auth:api')->group(function () {
+    Route::apiResource('packages', PackageController::class);
+    Route::apiResource('orders', OrderController::class);
+    Route::apiResource('portfolios', PortfolioController::class);
+    Route::apiResource('portfolio-images', PortfolioImageController::class);
+    Route::apiResource('portfolio-videos', PortfolioVideoController::class);
+    
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
+    Route::patch('/users/{id}', [UserController::class, 'update']);
+    Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    
+    Route::get('/orders-per-month', [OrderController::class, 'ordersPerMonth']);
+    Route::get('/dashboard-stats', [OrderController::class, 'dashboardStats']);
+    Route::post('logout', [AuthController::class, 'logout']);
+    
+    Route::get('/me', function (Request $request) {
+        return $request->user();
+    });
+});
 Route::middleware('auth:api')->get('/me', function (Request $request) {
     return $request->user();
 });

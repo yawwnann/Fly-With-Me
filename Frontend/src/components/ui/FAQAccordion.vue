@@ -1,9 +1,15 @@
 <template>
-  <section class="w-full py-20 bg-white text-black">
+  <section class="w-full py-20 bg-gray-100 text-gray-900">
     <div class="max-w-4xl mx-auto px-4">
       <h2 class="text-4xl md:text-5xl font-bold mb-12">Frequently Asked Questions (FAQ)</h2>
       <div class="divide-y divide-gray-200">
-        <div v-for="(item, idx) in faqs" :key="idx" class="py-6">
+        <div
+          v-for="(item, idx) in faqs"
+          :key="idx"
+          class="py-6"
+          data-aos="fade-up"
+          :data-aos-delay="idx * 100"
+        >
           <button
             class="w-full flex justify-between items-center text-left focus:outline-none group"
             @click="toggle(idx)"

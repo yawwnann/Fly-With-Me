@@ -1,9 +1,7 @@
 <template>
-  <section class="relative w-full py-20 bg-gray-50 text-gray-900 overflow-hidden">
+  <section class="relative w-full py-20 bg-gray-100 text-gray-900 overflow-hidden">
     <div class="mx-auto max-w-6xl px-4">
-      <h2
-        class="text-4xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent"
-      >
+      <h2 class="text-4xl md:text-4xl font-bold text-center mb-12 text-gray-800">
         Apa Kata Klien Kami?
       </h2>
       <div class="relative overflow-hidden">
@@ -12,6 +10,8 @@
             v-for="(testimonial, idx) in [...testimonials, ...testimonials]"
             :key="idx"
             class="flex-shrink-0 w-80 bg-white rounded-2xl p-8 border border-gray-200 transition-transform hover:scale-105 duration-300 flex flex-col relative"
+            data-aos="fade-up"
+            :data-aos-delay="(idx % testimonials.length) * 100"
           >
             <svg
               class="w-8 h-8 text-blue-100 absolute top-6 right-6"

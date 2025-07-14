@@ -1,7 +1,7 @@
 <template>
   <MainHeader />
   <div class="min-h-screen flex flex-col items-center justify-start">
-    <div class="relative w-full h-[60vh] flex items-center justify-center" data-aos="fade-down">
+    <div class="relative w-full h-[80vh] flex items-center justify-center" data-aos="fade-down">
       <!-- Background Gambar Dinamis -->
       <img :src="slides[current].image" alt="Banner" class="w-full h-full object-cover shadow" />
       <!-- Overlay gelap -->
@@ -30,7 +30,7 @@
       </div>
     </div>
     <!-- Section Layanan/Paket -->
-    <section class="w-full py-16 bg-gray-50 flex flex-col items-center" data-aos="fade-up">
+    <section class="w-full py-16 bg-gray-100 flex flex-col items-center" data-aos="fade-up">
       <h2 class="text-4xl font-bold mb-4 text-center">Pilih Paket Layanan Kami</h2>
       <p class="text-lg text-gray-500 mb-12 text-center">
         Paket jasa drone, fotografi, dan videografi profesional untuk kebutuhan Anda
@@ -68,11 +68,11 @@
       </div>
 
       <!-- Packages Grid -->
-      <div v-else class="flex flex-col md:flex-row gap-10 justify-center w-full max-w-7xl">
+      <div v-else class="flex flex-col md:flex-row gap-10 justify-center w-full max-w-7xl h-full">
         <div
           v-for="(packageItem, index) in packages"
           :key="packageItem.id"
-          class="bg-white rounded-2xl shadow-xl p-12 flex-1 flex flex-col items-center border relative"
+          class="bg-white rounded-2xl shadow-xl p-12 flex flex-col min-h-[420px] h-full items-center border relative"
           :class="[packageItem.is_popular ? 'border-4 border-blue-500' : 'border-gray-200']"
           data-aos="fade-up"
           :data-aos-delay="index * 100"
@@ -80,7 +80,7 @@
           <!-- Popular Badge -->
           <span
             v-if="packageItem.is_popular"
-            class="absolute -top-5 right-6 bg-blue-500 text-white text-sm px-4 py-1 rounded-full font-bold"
+            class="absolute -top-5 right-6 bg-gray-700 text-white text-sm px-4 py-1 rounded-full font-bold"
           >
             Paling Populer
           </span>
@@ -105,10 +105,10 @@
 
           <!-- Package Button -->
           <button
-            class="w-full py-3 rounded-full text-lg text-white font-semibold hover:opacity-90 transition"
+            class="w-full py-3 rounded-full text-lg text-white font-semibold hover:opacity-90 transition mt-auto"
             :class="[
               packageItem.is_popular
-                ? 'bg-blue-500 hover:bg-blue-600'
+                ? 'bg-gray-700 hover:bg-gray-800'
                 : 'bg-gray-600 hover:bg-gray-700',
             ]"
             @click="selectPackage(packageItem)"
@@ -119,7 +119,7 @@
       </div>
     </section>
     <!-- Section Keunggulan -->
-    <section class="w-full py-16 bg-gray-50 flex flex-col items-center" data-aos="fade-up">
+    <section class="w-full py-16 bg-gray-100 flex flex-col items-center" data-aos="fade-up">
       <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Kenapa Memilih Kami?</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-7xl">
         <!-- Card Keunggulan 1 -->
@@ -129,7 +129,7 @@
           :data-aos-delay="0"
         >
           <div class="mb-4">
-            <UserCheckIcon class="w-12 h-12 text-blue-600" />
+            <UserCheckIcon class="w-12 h-12 text-gray-700" />
           </div>
           <h3 class="text-xl font-semibold mb-2">Pilot Berpengalaman</h3>
           <p class="text-gray-500">
@@ -143,7 +143,7 @@
           :data-aos-delay="100"
         >
           <div class="mb-4">
-            <CameraIcon class="w-12 h-12 text-blue-600" />
+            <CameraIcon class="w-12 h-12 text-gray-700" />
           </div>
           <h3 class="text-xl font-semibold mb-2">Hasil Berkualitas Tinggi</h3>
           <p class="text-gray-500">
@@ -157,7 +157,7 @@
           :data-aos-delay="200"
         >
           <div class="mb-4">
-            <RocketIcon class="w-12 h-12 text-blue-600" />
+            <RocketIcon class="w-12 h-12 text-gray-700" />
           </div>
           <h3 class="text-xl font-semibold mb-2">Teknologi Drone Terbaru</h3>
           <p class="text-gray-500">
@@ -171,7 +171,7 @@
           :data-aos-delay="300"
         >
           <div class="mb-4">
-            <HeadphonesIcon class="w-12 h-12 text-blue-600" />
+            <HeadphonesIcon class="w-12 h-12 text-gray-700" />
           </div>
           <h3 class="text-xl font-semibold mb-2">Layanan Ramah & Responsif</h3>
           <p class="text-gray-500">
@@ -181,31 +181,14 @@
       </div>
     </section>
     <!-- Section Portfolio/Galeri -->
-    <section
-      class="w-full py-20 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden"
-      data-aos="fade-up"
-    >
+    <section class="w-full py-20 bg-gray-100 relative overflow-hidden" data-aos="fade-up">
       <!-- Background decorative elements -->
-      <div class="absolute inset-0 opacity-5">
-        <div
-          class="absolute top-20 left-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse"
-        ></div>
-        <div
-          class="absolute bottom-20 right-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-1000"
-        ></div>
-      </div>
-
+      <!-- Dihapus: elemen blur biru/ungu -->
       <div class="container mx-auto px-4 relative z-10">
         <!-- Header Section -->
         <div class="text-center mb-16">
-          <h2
-            class="text-4xl md:text-4xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent mb-6"
-          >
-            Portfolio & Galeri
-          </h2>
-          <div
-            class="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-6 rounded-full"
-          ></div>
+          <h2 class="text-4xl md:text-4xl font-bold text-gray-800 mb-6">Portfolio & Galeri</h2>
+          <div class="w-24 h-1 bg-gray-700 mx-auto mb-6 rounded-full"></div>
           <p class="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Beberapa hasil dokumentasi udara terbaik dari project yang telah kami kerjakan. Gambar
             akan berganti otomatis jika lebih dari satu.
@@ -320,7 +303,7 @@
                     {{ item.title || 'Portfolio' }}
                   </h3>
                   <div class="ml-3">
-                    <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <div class="w-2 h-2 bg-gray-700 rounded-full"></div>
                   </div>
                 </div>
 
@@ -347,7 +330,7 @@
                   </div>
 
                   <button
-                    class="flex items-center text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors"
+                    class="flex items-center text-gray-700 hover:text-gray-800 font-medium text-sm transition-colors"
                   >
                     <span>Lihat Detail</span>
                     <svg
@@ -372,12 +355,14 @@
       </div>
     </section>
     <!-- Section Testimonial -->
-    <section class="w-full bg-gray-50 py-20 flex flex-col items-center" data-aos="fade-up">
+    <section class="w-full bg-gray-100 py-20 flex flex-col items-center" data-aos="fade-up">
       <TestimonialCarousel />
     </section>
 
     <!-- FAQ Section -->
-    <FAQAccordion data-aos="fade-up" />
+    <section class="w-full bg-gray-100 py-20 flex flex-col items-center" data-aos="fade-up">
+      <FAQAccordion />
+    </section>
   </div>
   <MainFooter />
 </template>
@@ -476,7 +461,7 @@ function formatRupiah(price: number | string): string {
 
 // Select package function
 const selectPackage = (packageItem: any) => {
-  console.log('Selected package:', packageItem)
+  router.push({ name: 'UserCheckout', params: { packageId: packageItem.id } })
 }
 
 function parseFeatures(features: string[] | string): string[] {

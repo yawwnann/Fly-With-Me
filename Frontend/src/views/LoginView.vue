@@ -89,40 +89,44 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import api from '../api'
+import { useRouter, useRoute } from 'vue-router'
+import api from '@/plugins/axios'
 
 const email = ref('')
 const password = ref('')
 const error = ref('')
 const loading = ref(false)
 const router = useRouter()
+const route = useRoute()
 
 const login = async () => {
   error.value = ''
   loading.value = true
+  
   try {
-    const res = await api.post('/login', {
+    // Login request
+    const response = await api.post('/login', {
       email: email.value,
-      password: password.value,
+      password: password.value
     })
-    localStorage.setItem('token', res.data.token)
-
-    // Fetch user data setelah login
-    const userRes = await api.get('/me', {
-      headers: { Authorization: `Bearer ${res.data.token}` },
-    })
+    
+    // Simpan token ke localStorage
+    const token = response.data.token
+    localStorage.setItem('token', token)
+    
+    // Fetch user data
+    const userRes = await api.get('/me')
     localStorage.setItem('user_data', JSON.stringify(userRes.data))
-
-    // Redirect sesuai role
-    const role = userRes.data.role
-    if (role === 'admin') {
-      router.push('/admin')
-    } else {
-      router.push('/user')
-    }
-  } catch (e: any) {
-    error.value = e.response?.data?.error || 'Login gagal'
+    
+    // Redirect berdasarkan role atau halaman sebelumnya
+    const redirectPath = route.query.redirect as string || 
+                        (userRes.data.role === 'admin' ? '/admin' : '/user/dashboard')
+    
+    router.push(redirectPath)
+    
+  } catch (err: any) {
+    error.value = err.response?.data?.message || 'Login failed. Please check your credentials.'
+    console.error('Login error:', err)
   } finally {
     loading.value = false
   }

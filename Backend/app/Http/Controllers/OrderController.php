@@ -126,11 +126,11 @@ class OrderController extends Controller
     public function dashboardStats()
     {
         $total_users = \App\Models\User::count();
-        $total_orders = \App\Models\Order::count();
+        $total_orders = Order::count();
         $total_packages = \App\Models\Package::count();
         $total_portfolios = \App\Models\Portfolio::count();
 
-        $latest_orders = \App\Models\Order::orderBy('created_at', 'desc')->take(5)->get();
+        $latest_orders = Order::orderBy('created_at', 'desc')->take(5)->get();
         $latest_users = \App\Models\User::orderBy('created_at', 'desc')->take(5)->get();
 
         $notifications = [
