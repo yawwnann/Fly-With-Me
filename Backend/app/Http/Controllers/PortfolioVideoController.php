@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\PortfolioVideo;
 use Illuminate\Http\Response;
 use Cloudinary\Cloudinary;
+use Illuminate\Support\Facades\Log;
 
 class PortfolioVideoController extends Controller
 {
@@ -51,7 +52,7 @@ class PortfolioVideoController extends Controller
             ]);
             $uploadedFileUrl = $result['secure_url'];
         } catch (\Exception $e) {
-            \Log::error('Cloudinary video upload failed: ' . $e->getMessage());
+            Log::error('Cloudinary video upload failed: ' . $e->getMessage());
             return response()->json(['error' => 'Cloudinary video upload failed', 'message' => $e->getMessage()], 500);
         }
 

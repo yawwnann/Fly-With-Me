@@ -12,7 +12,7 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
 <template>
   <WelcomeItem>
     <template #icon>
-      <DocumentationIcon />
+      <!-- DocumentationIcon dihapus karena file tidak ada -->
     </template>
     <template #heading>Documentation</template>
 

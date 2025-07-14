@@ -218,7 +218,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import api from '@/api'
 
 const packages = ref([])
 const loading = ref(true)
@@ -228,7 +228,7 @@ onMounted(async () => {
   loading.value = true
   error.value = ''
   try {
-    const res = await axios.get('/api/packages')
+    const res = await api.get('/packages')
     packages.value = res.data.map((pkg) => {
       let features = []
       try {
@@ -281,7 +281,7 @@ async function fetchPackages() {
   loading.value = true
   error.value = ''
   try {
-    const res = await axios.get('/api/packages')
+    const res = await api.get('/packages')
     packages.value = res.data.map((pkg) => {
       let features = []
       try {
@@ -311,7 +311,7 @@ async function savePackage() {
   try {
     if (form.value.id) {
       // Edit (PUT)
-      await axios.put(`/api/packages/${form.value.id}`, {
+      await api.put(`/packages/${form.value.id}`, {
         name: form.value.name,
         description: form.value.description,
         price: form.value.price,
@@ -319,7 +319,7 @@ async function savePackage() {
       })
     } else {
       // Tambah (POST)
-      await axios.post('/api/packages', {
+      await api.post('/packages', {
         name: form.value.name,
         description: form.value.description,
         price: form.value.price,
@@ -336,7 +336,7 @@ async function savePackage() {
 async function deletePackage(id) {
   if (confirm('Yakin hapus package ini?')) {
     try {
-      await axios.delete(`/api/packages/${id}`)
+      await api.delete(`/packages/${id}`)
       await fetchPackages()
     } catch (e) {
       alert('Gagal menghapus package.')

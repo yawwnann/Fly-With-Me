@@ -508,9 +508,19 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import axios from 'axios'
+import api from '@/api'
 
-const portfolios = ref([])
+interface Portfolio {
+  id: number
+  title: string
+  description: string
+  images: { image_url: string }[]
+  videos: { video_url: string; thumbnail_url?: string }[]
+  created_at: string
+  // tambahkan field lain jika ada
+}
+
+const portfolios = ref<Portfolio[]>([])
 const loading = ref(true)
 
 // State untuk modal tambah
@@ -521,7 +531,7 @@ const addForm = ref({
 })
 
 // State untuk modal detail
-const selectedPortfolio = ref(null)
+const selectedPortfolio = ref<Portfolio | null>(null)
 const showDetailModal = ref(false)
 
 // State form gambar/video
@@ -545,17 +555,23 @@ const totalVideos = computed(() => {
   }, 0)
 })
 
-function onImageFileChange(e) {
-  imageFile.value = e.target.files[0]
+function onImageFileChange(e: Event) {
+  const target = e.target as HTMLInputElement
+  if (target && target.files) {
+    imageFile.value = target.files[0]
+  }
 }
 
-function onVideoFileChange(e) {
-  videoFile.value = e.target.files[0]
+function onVideoFileChange(e: Event) {
+  const target = e.target as HTMLInputElement
+  if (target && target.files) {
+    videoFile.value = target.files[0]
+  }
 }
 
 onMounted(async () => {
   try {
-    const res = await axios.get('/api/portfolios')
+    const res = await api.get('/portfolios')
     portfolios.value = res.data.data || res.data
   } catch (e) {
     console.error('Error loading portfolios:', e)
@@ -572,7 +588,7 @@ async function submitAddPortfolio() {
   }
 
   try {
-    const res = await axios.post('/api/portfolios', addForm.value)
+    const res = await api.post('/portfolios', addForm.value)
     portfolios.value.unshift(res.data)
     showAddModal.value = false
     addForm.value = { title: '', description: '' }
@@ -591,12 +607,12 @@ function formatDate(date: string) {
   })
 }
 
-function viewPortfolio(portfolio: any) {
+function viewPortfolio(portfolio: Portfolio) {
   selectedPortfolio.value = portfolio
   showDetailModal.value = true
 }
 
-function editPortfolio(portfolio: any) {
+function editPortfolio(portfolio: Portfolio) {
   // TODO: Implementasi fungsionalitas edit
   console.log('Edit portfolio:', portfolio)
 }
@@ -611,15 +627,17 @@ async function submitAddImage() {
   imageUploading.value = true
   try {
     const formData = new FormData()
-    formData.append('portfolio_id', selectedPortfolio.value.id)
+    formData.append('portfolio_id', selectedPortfolio.value?.id.toString() || '')
     formData.append('image', imageFile.value)
 
-    const res = await axios.post('/api/portfolio-images', formData, {
+    const res = await api.post('/portfolio-images', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
 
-    selectedPortfolio.value.images = selectedPortfolio.value.images || []
-    selectedPortfolio.value.images.push({ image_url: res.data.image_url })
+    if (selectedPortfolio.value) {
+      selectedPortfolio.value.images = selectedPortfolio.value.images || []
+      selectedPortfolio.value.images.push({ image_url: res.data.image_url })
+    }
 
     // Reset form
     imageFile.value = null
@@ -640,15 +658,17 @@ async function submitAddVideo() {
   videoUploading.value = true
   try {
     const formData = new FormData()
-    formData.append('portfolio_id', selectedPortfolio.value.id)
+    formData.append('portfolio_id', selectedPortfolio.value?.id.toString() || '')
     formData.append('video', videoFile.value)
 
-    const res = await axios.post('/api/portfolio-videos', formData, {
+    const res = await api.post('/portfolio-videos', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
 
-    selectedPortfolio.value.videos = selectedPortfolio.value.videos || []
-    selectedPortfolio.value.videos.push({ video_url: res.data.video_url })
+    if (selectedPortfolio.value) {
+      selectedPortfolio.value.videos = selectedPortfolio.value.videos || []
+      selectedPortfolio.value.videos.push({ video_url: res.data.video_url })
+    }
 
     // Reset form
     videoFile.value = null

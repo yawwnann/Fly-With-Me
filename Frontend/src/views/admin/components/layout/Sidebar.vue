@@ -106,39 +106,25 @@
                   :exact="true"
                   class="group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 hover:scale-105"
                   :style="{
-                    color: $route.path === '/admin' ? 'white' : 'var(--color-text-secondary)',
-                    background: $route.path === '/admin' ? 'var(--color-primary)' : 'transparent',
+                    color: route.path === '/admin' ? 'white' : 'var(--color-text-secondary)',
+                    background: route.path === '/admin' ? 'var(--color-primary)' : 'transparent',
                   }"
                   @mouseover="
-                    $event.target.style.background =
-                      $route.path === '/admin'
-                        ? 'var(--color-primary-hover)'
-                        : 'var(--color-bg-card)'
+                    if ($event.target && 'style' in $event.target) {
+                      ;($event.target as HTMLElement).style.background =
+                        route.path === '/admin'
+                          ? 'var(--color-primary-hover)'
+                          : 'var(--color-bg-card)'
+                    }
                   "
                   @mouseleave="
-                    $event.target.style.background =
-                      $route.path === '/admin' ? 'var(--color-primary)' : 'transparent'
+                    if ($event.target && 'style' in $event.target) {
+                      ;($event.target as HTMLElement).style.background =
+                        route.path === '/admin' ? 'var(--color-primary)' : 'transparent'
+                    }
                   "
                 >
-                  <svg
-                    class="w-5 h-5 group-hover:scale-110 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"
-                    />
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M8 5a2 2 0 012-2h4a2 2 0 012 2v0a2 2 0 01-2 2H10a2 2 0 01-2-2v0z"
-                    />
-                  </svg>
+                  <LayoutDashboard class="w-5 h-5 mr-2" />
                   <span class="font-medium">Dashboard</span>
                 </router-link>
               </li>
@@ -147,35 +133,26 @@
                   to="/admin/orders"
                   class="group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 hover:scale-105"
                   :style="{
-                    color:
-                      $route.path === '/admin/orders' ? 'white' : 'var(--color-text-secondary)',
+                    color: route.path === '/admin/orders' ? 'white' : 'var(--color-text-secondary)',
                     background:
-                      $route.path === '/admin/orders' ? 'var(--color-primary)' : 'transparent',
+                      route.path === '/admin/orders' ? 'var(--color-primary)' : 'transparent',
                   }"
                   @mouseover="
-                    $event.target.style.background =
-                      $route.path === '/admin/orders'
-                        ? 'var(--color-primary-hover)'
-                        : 'var(--color-bg-card)'
+                    if ($event.target && 'style' in $event.target) {
+                      ;($event.target as HTMLElement).style.background =
+                        route.path === '/admin/orders'
+                          ? 'var(--color-primary-hover)'
+                          : 'var(--color-bg-card)'
+                    }
                   "
                   @mouseleave="
-                    $event.target.style.background =
-                      $route.path === '/admin/orders' ? 'var(--color-primary)' : 'transparent'
+                    if ($event.target && 'style' in $event.target) {
+                      ;($event.target as HTMLElement).style.background =
+                        route.path === '/admin/orders' ? 'var(--color-primary)' : 'transparent'
+                    }
                   "
                 >
-                  <svg
-                    class="w-5 h-5 group-hover:scale-110 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
+                  <ShoppingCart class="w-5 h-5 mr-2" />
                   <span class="font-medium">Pesanan</span>
                 </router-link>
               </li>
@@ -185,34 +162,26 @@
                   class="group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 hover:scale-105"
                   :style="{
                     color:
-                      $route.path === '/admin/portfolios' ? 'white' : 'var(--color-text-secondary)',
+                      route.path === '/admin/portfolios' ? 'white' : 'var(--color-text-secondary)',
                     background:
-                      $route.path === '/admin/portfolios' ? 'var(--color-primary)' : 'transparent',
+                      route.path === '/admin/portfolios' ? 'var(--color-primary)' : 'transparent',
                   }"
                   @mouseover="
-                    $event.target.style.background =
-                      $route.path === '/admin/portfolios'
-                        ? 'var(--color-primary-hover)'
-                        : 'var(--color-bg-card)'
+                    if ($event.target && 'style' in $event.target) {
+                      ;($event.target as HTMLElement).style.background =
+                        route.path === '/admin/portfolios'
+                          ? 'var(--color-primary-hover)'
+                          : 'var(--color-bg-card)'
+                    }
                   "
                   @mouseleave="
-                    $event.target.style.background =
-                      $route.path === '/admin/portfolios' ? 'var(--color-primary)' : 'transparent'
+                    if ($event.target && 'style' in $event.target) {
+                      ;($event.target as HTMLElement).style.background =
+                        route.path === '/admin/portfolios' ? 'var(--color-primary)' : 'transparent'
+                    }
                   "
                 >
-                  <svg
-                    class="w-5 h-5 group-hover:scale-110 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                    />
-                  </svg>
+                  <Image class="w-5 h-5 mr-2" />
                   <span class="font-medium">Portfolio</span>
                 </router-link>
               </li>
@@ -221,34 +190,26 @@
                   to="/admin/users"
                   class="group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 hover:scale-105"
                   :style="{
-                    color: $route.path === '/admin/users' ? 'white' : 'var(--color-text-secondary)',
+                    color: route.path === '/admin/users' ? 'white' : 'var(--color-text-secondary)',
                     background:
-                      $route.path === '/admin/users' ? 'var(--color-primary)' : 'transparent',
+                      route.path === '/admin/users' ? 'var(--color-primary)' : 'transparent',
                   }"
                   @mouseover="
-                    $event.target.style.background =
-                      $route.path === '/admin/users'
-                        ? 'var(--color-primary-hover)'
-                        : 'var(--color-bg-card)'
+                    if ($event.target && 'style' in $event.target) {
+                      ;($event.target as HTMLElement).style.background =
+                        route.path === '/admin/users'
+                          ? 'var(--color-primary-hover)'
+                          : 'var(--color-bg-card)'
+                    }
                   "
                   @mouseleave="
-                    $event.target.style.background =
-                      $route.path === '/admin/users' ? 'var(--color-primary)' : 'transparent'
+                    if ($event.target && 'style' in $event.target) {
+                      ;($event.target as HTMLElement).style.background =
+                        route.path === '/admin/users' ? 'var(--color-primary)' : 'transparent'
+                    }
                   "
                 >
-                  <svg
-                    class="w-5 h-5 group-hover:scale-110 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
-                    />
-                  </svg>
+                  <Users class="w-5 h-5 mr-2" />
                   <span class="font-medium">Pengguna</span>
                 </router-link>
               </li>
@@ -258,30 +219,26 @@
                   class="group flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-200 hover:scale-105"
                   :style="{
                     color:
-                      $route.path === '/admin/packages' ? 'white' : 'var(--color-text-secondary)',
+                      route.path === '/admin/packages' ? 'white' : 'var(--color-text-secondary)',
                     background:
-                      $route.path === '/admin/packages' ? 'var(--color-primary)' : 'transparent',
+                      route.path === '/admin/packages' ? 'var(--color-primary)' : 'transparent',
                   }"
                   @mouseover="
-                    $event.target.style.background =
-                      $route.path === '/admin/packages'
-                        ? 'var(--color-primary-hover)'
-                        : 'var(--color-bg-card)'
+                    if ($event.target && 'style' in $event.target) {
+                      ;($event.target as HTMLElement).style.background =
+                        route.path === '/admin/packages'
+                          ? 'var(--color-primary-hover)'
+                          : 'var(--color-bg-card)'
+                    }
                   "
                   @mouseleave="
-                    $event.target.style.background =
-                      $route.path === '/admin/packages' ? 'var(--color-primary)' : 'transparent'
+                    if ($event.target && 'style' in $event.target) {
+                      ;($event.target as HTMLElement).style.background =
+                        route.path === '/admin/packages' ? 'var(--color-primary)' : 'transparent'
+                    }
                   "
                 >
-                  <svg
-                    class="w-5 h-5 group-hover:scale-110 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <rect x="3" y="7" width="18" height="13" rx="2" />
-                    <path d="M16 3v4M8 3v4" />
-                  </svg>
+                  <Package class="w-5 h-5 mr-2" />
                   <span class="font-medium">Paket Layanan</span>
                 </router-link>
               </li>
@@ -300,8 +257,16 @@
               <button
                 class="w-full flex items-center gap-3 py-2 px-4 rounded-lg transition-all duration-200 text-sm hover:scale-105"
                 style="color: var(--color-text-secondary)"
-                @mouseover="$event.target.style.background = 'var(--color-bg-card)'"
-                @mouseleave="$event.target.style.background = 'transparent'"
+                @mouseover="
+                  if ($event.target && 'style' in $event.target) {
+                    ;($event.target as HTMLElement).style.background = 'var(--color-bg-card)'
+                  }
+                "
+                @mouseleave="
+                  if ($event.target && 'style' in $event.target) {
+                    ;($event.target as HTMLElement).style.background = 'transparent'
+                  }
+                "
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -316,17 +281,18 @@
               <button
                 class="w-full flex items-center gap-3 py-2 px-4 rounded-lg transition-all duration-200 text-sm hover:scale-105"
                 style="color: var(--color-text-secondary)"
-                @mouseover="$event.target.style.background = 'var(--color-bg-card)'"
-                @mouseleave="$event.target.style.background = 'transparent'"
+                @mouseover="
+                  if ($event.target && 'style' in $event.target) {
+                    ;($event.target as HTMLElement).style.background = 'var(--color-bg-card)'
+                  }
+                "
+                @mouseleave="
+                  if ($event.target && 'style' in $event.target) {
+                    ;($event.target as HTMLElement).style.background = 'transparent'
+                  }
+                "
               >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                  />
-                </svg>
+                <BarChart class="w-5 h-5 mr-2" />
                 <span>Analytics</span>
               </button>
             </div>
@@ -353,17 +319,18 @@
               class="w-8 h-8 flex items-center justify-center rounded-full transition-colors"
               style="color: var(--color-text-secondary)"
               @click="handleLogout"
-              @mouseover="$event.target.style.background = 'var(--color-bg-main)'"
-              @mouseleave="$event.target.style.background = 'transparent'"
+              @mouseover="
+                if ($event.target && 'style' in $event.target) {
+                  ;($event.target as HTMLElement).style.background = 'var(--color-bg-main)'
+                }
+              "
+              @mouseleave="
+                if ($event.target && 'style' in $event.target) {
+                  ;($event.target as HTMLElement).style.background = 'transparent'
+                }
+              "
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                />
-              </svg>
+              <LogOut class="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -374,16 +341,28 @@
 
 <script setup lang="ts">
 import { useCounterStore } from '@/stores/counter'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
+import api from '@/api'
+// Import icon lucide
+import {
+  LayoutDashboard,
+  ShoppingCart,
+  Image,
+  Users,
+  Package,
+  BarChart,
+  LogOut,
+} from 'lucide-vue-next'
 
+const route = useRoute()
 const router = useRouter()
 const store = useCounterStore()
 const toggleSidebar = () => {}
 
 const handleLogout = async () => {
   try {
-    await axios.post('/api/logout')
+    await api.post('/logout')
   } catch (e) {
     // ignore error
   }

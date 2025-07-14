@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Http\Response;
+use Midtrans\Snap;
+use Midtrans\Config as MidtransConfig;
 
 class OrderController extends Controller
 {
@@ -95,6 +97,92 @@ class OrderController extends Controller
         $order = Order::findOrFail($id);
         $order->delete();
         return response()->json(['message' => 'Order deleted successfully.']);
+    }
+
+    /**
+     * Generate Midtrans Snap Token for an order
+     */
+    public function createMidtransToken($id)
+    {
+        $order = Order::with('package')->findOrFail($id);
+        // Konfigurasi Midtrans
+        MidtransConfig::$serverKey = config('services.midtrans.server_key');
+        MidtransConfig::$isProduction = config('services.midtrans.is_production');
+        MidtransConfig::$isSanitized = config('services.midtrans.is_sanitized');
+        MidtransConfig::$is3ds = config('services.midtrans.is_3ds');
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => 'ORDER-' . $order->id . '-' . time(),
+                'gross_amount' => (int) $order->total_price,
+            ],
+            'customer_details' => [
+                'first_name' => $order->name,
+                'phone' => $order->contact,
+            ],
+            'item_details' => [
+                [
+                    'id' => $order->package->id,
+                    'price' => (int) $order->total_price,
+                    'quantity' => 1,
+                    'name' => $order->package->name,
+                ]
+            ],
+        ];
+
+        try {
+            $snapToken = Snap::getSnapToken($params);
+            // Simpan snap_token ke order jika mau (opsional)
+            $order->midtrans_order_id = $params['transaction_details']['order_id'];
+            $order->save();
+            return response()->json(['token' => $snapToken]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Handle Midtrans payment notification (webhook)
+     */
+    public function midtransNotification(Request $request)
+    {
+        // Konfigurasi Midtrans
+        MidtransConfig::$serverKey = config('services.midtrans.server_key');
+        MidtransConfig::$isProduction = config('services.midtrans.is_production');
+        MidtransConfig::$isSanitized = config('services.midtrans.is_sanitized');
+        MidtransConfig::$is3ds = config('services.midtrans.is_3ds');
+
+        $notif = new \Midtrans\Notification();
+        $orderId = $notif->order_id;
+        $transaction = $notif->transaction_status;
+        $fraud = $notif->fraud_status;
+
+        // Cari order berdasarkan midtrans_order_id
+        $order = Order::where('midtrans_order_id', $orderId)->first();
+        if (!$order) {
+            return response()->json(['error' => 'Order not found'], 404);
+        }
+
+        // Update status pembayaran
+        if ($transaction == 'capture') {
+            if ($fraud == 'challenge') {
+                $order->payment_status = 'challenge';
+            } else if ($fraud == 'accept') {
+                $order->payment_status = 'paid';
+                $order->status = 'confirmed';
+            }
+        } else if ($transaction == 'settlement') {
+            $order->payment_status = 'paid';
+            $order->status = 'confirmed';
+        } else if ($transaction == 'pending') {
+            $order->payment_status = 'pending';
+        } else if ($transaction == 'deny' || $transaction == 'expire' || $transaction == 'cancel') {
+            $order->payment_status = 'failed';
+            $order->status = 'cancelled';
+        }
+        $order->save();
+
+        return response()->json(['message' => 'Notification processed']);
     }
 
     // Statistik order per bulan (12 bulan terakhir)

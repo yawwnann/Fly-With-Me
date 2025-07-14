@@ -183,11 +183,38 @@
 import { ref, onMounted } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
-import axios from 'axios'
+import api from '@/api'
 
 Chart.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
-const stats = ref({
+interface Notification {
+  type: string
+  message: string
+  time: string
+}
+interface Order {
+  id: number
+  package_id: number
+  created_at: string
+  payment_status: string
+  // tambahkan field lain jika ada
+}
+interface User {
+  id: number
+  name: string
+  email: string
+  created_at: string
+  role: string
+}
+const stats = ref<{
+  total_users: number
+  total_orders: number
+  total_packages: number
+  total_portfolios: number
+  latest_orders: Order[]
+  latest_users: User[]
+  notifications: Notification[]
+}>({
   total_users: 0,
   total_orders: 0,
   total_packages: 0,
@@ -229,8 +256,8 @@ onMounted(async () => {
   chartLoading.value = true
   try {
     const [statsRes, chartRes] = await Promise.all([
-      axios.get('/api/dashboard-stats'),
-      axios.get('/api/orders-per-month'),
+      api.get('/dashboard-stats'),
+      api.get('/orders-per-month'),
     ])
     stats.value = statsRes.data
     chartData.value.labels = chartRes.data.labels

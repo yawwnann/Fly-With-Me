@@ -102,28 +102,34 @@ const route = useRoute()
 const login = async () => {
   error.value = ''
   loading.value = true
-  
+
   try {
     // Login request
     const response = await api.post('/login', {
       email: email.value,
-      password: password.value
+      password: password.value,
     })
-    
+
     // Simpan token ke localStorage
     const token = response.data.token
     localStorage.setItem('token', token)
-    
+
     // Fetch user data
     const userRes = await api.get('/me')
     localStorage.setItem('user_data', JSON.stringify(userRes.data))
-    
+
     // Redirect berdasarkan role atau halaman sebelumnya
-    const redirectPath = route.query.redirect as string || 
-                        (userRes.data.role === 'admin' ? '/admin' : '/user/dashboard')
-    
+    let redirectPath = route.query.redirect as string
+    if (!redirectPath) {
+      if (userRes.data.role === 'admin') {
+        redirectPath = '/admin'
+      } else if (userRes.data.role === 'user') {
+        redirectPath = '/user/dashboard'
+      } else {
+        redirectPath = '/'
+      }
+    }
     router.push(redirectPath)
-    
   } catch (err: any) {
     error.value = err.response?.data?.message || 'Login failed. Please check your credentials.'
     console.error('Login error:', err)

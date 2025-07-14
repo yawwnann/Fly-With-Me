@@ -647,7 +647,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import axios from 'axios'
+import api from '@/api'
 
 interface Order {
   id: string
@@ -720,7 +720,7 @@ const totalRevenue = computed(() =>
 
 onMounted(async () => {
   try {
-    const res = await axios.get('/api/orders')
+    const res = await api.get('/orders')
     orders.value = res.data.data || res.data
   } catch (e) {
     console.error('Gagal memuat data orders:', e)
@@ -750,10 +750,10 @@ function editOrder(order: Order) {
 async function submitEdit() {
   if (!editingOrder.value) return
   try {
-    await axios.put(`/api/orders/${editingOrder.value.id}`, editForm.value)
+    await api.put(`/orders/${editingOrder.value.id}`, editForm.value)
     // Update data di frontend
-    const idx = orders.value.findIndex((o) => o.id === editingOrder.value.id)
-    if (idx !== -1) {
+    const idx = orders.value.findIndex((o) => o.id === editingOrder.value?.id)
+    if (idx !== -1 && editingOrder.value) {
       orders.value[idx] = { ...orders.value[idx], ...editForm.value }
     }
     editingOrder.value = null

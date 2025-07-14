@@ -491,9 +491,17 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import axios from 'axios'
+import api from '@/api'
 
-const users = ref([])
+interface User {
+  id: number
+  name: string
+  email: string
+  role: string
+  created_at: string
+  password?: string
+}
+const users = ref<User[]>([])
 const loading = ref(true)
 const error = ref('')
 const searchTerm = ref('')
@@ -543,7 +551,7 @@ async function fetchUsers() {
   loading.value = true
   error.value = ''
   try {
-    const res = await axios.get('/api/users')
+    const res = await api.get('/users')
     users.value = res.data
   } catch (e) {
     error.value = 'Gagal memuat data pengguna. Silakan coba lagi.'
@@ -556,7 +564,7 @@ onMounted(fetchUsers)
 
 async function submitAddUser() {
   try {
-    await axios.post('/api/users', addForm.value)
+    await api.post('/users', addForm.value)
     showAddModal.value = false
     addForm.value = { name: '', email: '', password: '', role: 'user' }
     fetchUsers()
@@ -573,8 +581,11 @@ function openEditModal(user: any) {
 async function submitEditUser() {
   try {
     const payload = { ...editForm.value }
-    if (!payload.password) delete payload.password
-    await axios.put(`/api/users/${editForm.value.id}`, payload)
+    if (!payload.password && 'password' in payload) {
+      // @ts-ignore
+      delete payload.password
+    }
+    await api.put(`/users/${editForm.value.id}`, payload)
     showEditModal.value = false
     fetchUsers()
   } catch (e: any) {
@@ -590,7 +601,7 @@ function confirmDelete(user: any) {
 async function deleteUser() {
   if (!deleteTarget.value) return
   try {
-    await axios.delete(`/api/users/${deleteTarget.value.id}`)
+    await api.delete(`/users/${deleteTarget.value.id}`)
     showDeleteModal.value = false
     fetchUsers()
   } catch (e: any) {

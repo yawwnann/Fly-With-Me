@@ -1,4 +1,9 @@
-import { createRouter, createWebHistory, type RouteLocationNormalized, type NavigationGuard } from 'vue-router'
+import {
+  createRouter,
+  createWebHistory,
+  type RouteLocationNormalized,
+  type NavigationGuard,
+} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AdminLayout from '../views/admin/layouts/app-layout.vue'
 import AdminDashboard from '../views/admin/AdminDashboard.vue'
@@ -20,16 +25,15 @@ const isAuthenticated = (): boolean => {
   return !!localStorage.getItem('token')
 }
 
-// Fungsi untuk mendapatkan role user dari token
+// Fungsi untuk mendapatkan role user dari user_data (bukan dari token)
 const getUserRole = (): string | null => {
-  const token = localStorage.getItem('token')
-  if (!token) return null
-  
+  const userData = localStorage.getItem('user_data')
+  if (!userData) return null
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]))
-    return payload.role || null
+    const parsed = JSON.parse(userData)
+    return parsed.role || null
   } catch (error) {
-    console.error('Error parsing token:', error)
+    console.error('Error parsing user_data:', error)
     return null
   }
 }
@@ -41,30 +45,30 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: false },
     },
     {
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue'),
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: false },
     },
     {
       path: '/login',
       name: 'login',
       component: LoginView,
-      meta: { requiresGuest: true }
+      meta: { requiresGuest: true },
     },
     {
       path: '/register',
       name: 'register',
       component: RegisterView,
-      meta: { requiresGuest: true }
+      meta: { requiresGuest: true },
     },
     {
       path: '/logout',
       name: 'logout',
-      component: LogoutView
+      component: LogoutView,
     },
     // Admin routes
     {
@@ -145,8 +149,14 @@ const router = createRouter({
           path: 'checkout',
           name: 'Checkout',
           component: Checkout,
-        }
-      ]
+        },
+      ],
+    },
+    {
+      path: '/user/orders',
+      name: 'UserOrdersHistory',
+      component: Orders,
+      meta: { requiresAuth: true, role: 'user' },
     },
     {
       path: '/user/checkout/:packageId',
@@ -178,8 +188,8 @@ router.beforeEach((to, from, next) => {
     return next()
   }
 
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  const requiresGuest = to.matched.some(record => record.meta.requiresGuest)
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
+  const requiresGuest = to.matched.some((record) => record.meta.requiresGuest)
   const requiredRole = to.meta.role as string | undefined
   const isAuth = isAuthenticated()
   const userRole = isAuth ? getUserRole() : null
@@ -190,7 +200,7 @@ router.beforeEach((to, from, next) => {
     // Simpan path yang dituju untuk redirect setelah login
     return next({
       name: 'login',
-      query: { redirect: to.fullPath !== '/' ? to.fullPath : undefined }
+      query: { redirect: to.fullPath !== '/' ? to.fullPath : undefined },
     })
   }
 
