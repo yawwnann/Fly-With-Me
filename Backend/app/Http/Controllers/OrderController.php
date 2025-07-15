@@ -21,9 +21,9 @@ class OrderController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         if ($user->role === 'admin') {
-            $orders = Order::with('package')->orderBy('date', 'desc')->get();
+            $orders = Order::with('package')->orderBy('created_at', 'desc')->get();
         } else {
-            $orders = Order::with('package')->where('user_id', $user->id)->orderBy('date', 'desc')->get();
+            $orders = Order::with('package')->where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         }
         return response()->json($orders);
     }

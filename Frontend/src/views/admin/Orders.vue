@@ -749,13 +749,8 @@ const filteredOrders = computed(() => {
     filtered = filtered.filter((order) => order.payment_status === paymentFilter.value)
   }
 
-  // Urutkan lagi jika perlu
-  return [...filtered].sort((a, b) => {
-    if (a.date && b.date) {
-      return new Date(b.date).getTime() - new Date(a.date).getTime()
-    }
-    return Number(b.id) - Number(a.id)
-  })
+  // Jangan urutkan lagi di frontend, biarkan urutan dari backend
+  return filtered
 })
 
 const completedOrders = computed(
@@ -776,15 +771,9 @@ const deleteLoading = ref(false)
 onMounted(async () => {
   try {
     const res = await api.get('/orders')
-    // Urutkan data dari backend, order terbaru di atas
+    // Ambil urutan dari backend saja
     const data = res.data.data || res.data
-    orders.value = [...data].sort((a, b) => {
-      // Jika ada field date, gunakan date, jika tidak gunakan id
-      if (a.date && b.date) {
-        return new Date(b.date).getTime() - new Date(a.date).getTime()
-      }
-      return Number(b.id) - Number(a.id)
-    })
+    orders.value = data
   } catch (e) {
     console.error('Gagal memuat data orders:', e)
     // Bisa tambahkan toast notification di sini
