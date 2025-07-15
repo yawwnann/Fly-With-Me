@@ -7,6 +7,7 @@ use App\Models\Order;
 use Illuminate\Http\Response;
 use Midtrans\Snap;
 use Midtrans\Config as MidtransConfig;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -15,7 +16,15 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with('package')->get();
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        if ($user->role === 'admin') {
+            $orders = Order::with('package')->orderBy('date', 'desc')->get();
+        } else {
+            $orders = Order::with('package')->where('user_id', $user->id)->orderBy('date', 'desc')->get();
+        }
         return response()->json($orders);
     }
 
@@ -32,8 +41,13 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         $validated = $request->validate([
-            'user_id' => 'nullable|integer|exists:users,id',
+            // 'user_id' dihapus dari validasi
             'package_id' => 'required|integer|exists:packages,id',
             'name' => 'required|string|max:255',
             'contact' => 'required|string|max:255',
@@ -45,6 +59,7 @@ class OrderController extends Controller
             'midtrans_order_id' => 'nullable|string',
             'total_price' => 'required|numeric|min:0',
         ]);
+        $validated['user_id'] = $user->id;
         $order = Order::create($validated);
         return response()->json($order, 201);
     }
@@ -94,6 +109,10 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
+        $user = Auth::user();
+        if (!$user || $user->role !== 'admin') {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
         $order = Order::findOrFail($id);
         $order->delete();
         return response()->json(['message' => 'Order deleted successfully.']);

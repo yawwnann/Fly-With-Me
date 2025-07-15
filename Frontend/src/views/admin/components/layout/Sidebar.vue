@@ -13,7 +13,7 @@
             @click="toggleSidebar()"
             aria-label="Toggle sidebar"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -23,11 +23,11 @@
             </svg>
           </button>
           <router-link to="/" class="flex items-center gap-2">
-            <img
+            <!-- <img
               src="/src/assets/flywithus.png"
               alt="FlyWithUs Logo"
               class="h-8 w-8 object-contain"
-            />
+            /> -->
             <span class="text-xl font-bold" style="color: var(--color-text-main)">ADMIN</span>
           </router-link>
         </div>
@@ -72,20 +72,12 @@
               <img
                 src="/src/assets/flywithus.png"
                 alt="FlyWithUs Logo"
-                class="h-12 w-12 object-contain rounded-lg bg-white p-2 shadow-md group-hover:scale-105 transition-transform duration-200"
+                class="h-20 w-auto object-contain rounded-lg p-2 shadow-md group-hover:scale-105 transition-transform duration-200"
               />
               <div
                 class="absolute -top-1 -right-1 w-4 h-4 rounded-full border-2"
                 style="background: var(--color-primary); border-color: var(--color-bg-main)"
               ></div>
-            </div>
-            <div class="flex flex-col">
-              <span class="text-xl font-bold tracking-wide" style="color: var(--color-text-main)"
-                >ADMIN</span
-              >
-              <span class="text-xs" style="color: var(--color-text-secondary)"
-                >Dashboard Panel</span
-              >
             </div>
           </router-link>
         </div>
@@ -109,6 +101,7 @@
                     color: route.path === '/admin' ? 'white' : 'var(--color-text-secondary)',
                     background: route.path === '/admin' ? 'var(--color-primary)' : 'transparent',
                   }"
+                  @click="handleSidebarClick"
                   @mouseover="
                     if ($event.target && 'style' in $event.target) {
                       ;($event.target as HTMLElement).style.background =
@@ -137,6 +130,7 @@
                     background:
                       route.path === '/admin/orders' ? 'var(--color-primary)' : 'transparent',
                   }"
+                  @click="handleSidebarClick"
                   @mouseover="
                     if ($event.target && 'style' in $event.target) {
                       ;($event.target as HTMLElement).style.background =
@@ -166,6 +160,7 @@
                     background:
                       route.path === '/admin/portfolios' ? 'var(--color-primary)' : 'transparent',
                   }"
+                  @click="handleSidebarClick"
                   @mouseover="
                     if ($event.target && 'style' in $event.target) {
                       ;($event.target as HTMLElement).style.background =
@@ -194,6 +189,7 @@
                     background:
                       route.path === '/admin/users' ? 'var(--color-primary)' : 'transparent',
                   }"
+                  @click="handleSidebarClick"
                   @mouseover="
                     if ($event.target && 'style' in $event.target) {
                       ;($event.target as HTMLElement).style.background =
@@ -223,6 +219,7 @@
                     background:
                       route.path === '/admin/packages' ? 'var(--color-primary)' : 'transparent',
                   }"
+                  @click="handleSidebarClick"
                   @mouseover="
                     if ($event.target && 'style' in $event.target) {
                       ;($event.target as HTMLElement).style.background =
@@ -244,59 +241,6 @@
               </li>
             </ul>
           </div>
-
-          <!-- Quick Actions -->
-          <div class="mb-6">
-            <h3
-              class="text-xs font-semibold uppercase tracking-wider mb-3 px-3"
-              style="color: var(--color-text-secondary)"
-            >
-              Quick Actions
-            </h3>
-            <div class="space-y-2">
-              <button
-                class="w-full flex items-center gap-3 py-2 px-4 rounded-lg transition-all duration-200 text-sm hover:scale-105"
-                style="color: var(--color-text-secondary)"
-                @mouseover="
-                  if ($event.target && 'style' in $event.target) {
-                    ;($event.target as HTMLElement).style.background = 'var(--color-bg-card)'
-                  }
-                "
-                @mouseleave="
-                  if ($event.target && 'style' in $event.target) {
-                    ;($event.target as HTMLElement).style.background = 'transparent'
-                  }
-                "
-              >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  />
-                </svg>
-                <span>New Order</span>
-              </button>
-              <button
-                class="w-full flex items-center gap-3 py-2 px-4 rounded-lg transition-all duration-200 text-sm hover:scale-105"
-                style="color: var(--color-text-secondary)"
-                @mouseover="
-                  if ($event.target && 'style' in $event.target) {
-                    ;($event.target as HTMLElement).style.background = 'var(--color-bg-card)'
-                  }
-                "
-                @mouseleave="
-                  if ($event.target && 'style' in $event.target) {
-                    ;($event.target as HTMLElement).style.background = 'transparent'
-                  }
-                "
-              >
-                <BarChart class="w-5 h-5 mr-2" />
-                <span>Analytics</span>
-              </button>
-            </div>
-          </div>
         </div>
 
         <!-- Footer Section -->
@@ -309,11 +253,17 @@
               class="w-10 h-10 rounded-full flex items-center justify-center"
               style="background: var(--color-primary)"
             >
-              <span class="text-white font-semibold text-sm">AD</span>
+              <span class="text-white font-semibold text-sm">{{
+                userData?.name ? userData.name.charAt(0).toUpperCase() : 'AD'
+              }}</span>
             </div>
             <div class="flex-1">
-              <p class="text-sm font-medium" style="color: var(--color-text-main)">Admin User</p>
-              <p class="text-xs" style="color: var(--color-text-secondary)">admin@flywithus.com</p>
+              <p class="text-sm font-medium" style="color: var(--color-text-main)">
+                {{ userData?.name || 'Admin' }}
+              </p>
+              <p class="text-xs" style="color: var(--color-text-secondary)">
+                {{ userData?.email || '-' }}
+              </p>
             </div>
             <button
               class="w-8 h-8 flex items-center justify-center rounded-full transition-colors"
@@ -344,6 +294,7 @@ import { useCounterStore } from '@/stores/counter'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import api from '@/api'
+import { ref, onMounted } from 'vue'
 // Import icon lucide
 import {
   LayoutDashboard,
@@ -358,7 +309,27 @@ import {
 const route = useRoute()
 const router = useRouter()
 const store = useCounterStore()
-const toggleSidebar = () => {}
+const toggleSidebar = () => {
+  store.sidebar = !store.sidebar
+}
+
+function handleSidebarClick() {
+  if (typeof window !== 'undefined' && window.innerWidth < 1024) store.sidebar = false
+}
+
+const userData = ref<{ name: string; email: string } | null>(null)
+
+defineExpose({ userData })
+
+onMounted(() => {
+  // Ambil dari localStorage key 'user_data' (bukan 'user')
+  const userStr = localStorage.getItem('user_data')
+  if (userStr) {
+    try {
+      userData.value = JSON.parse(userStr)
+    } catch {}
+  }
+})
 
 const handleLogout = async () => {
   try {

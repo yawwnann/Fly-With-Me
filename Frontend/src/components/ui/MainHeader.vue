@@ -1,4 +1,7 @@
 <template>
+  <!-- <div style="position: fixed; top: 0; right: 0; z-index: 9999; background: #fff">
+    {{ activeSection }}
+  </div> -->
   <header
     :class="[
       'fixed top-0 left-0 w-full z-50 transition-all duration-300',
@@ -35,83 +38,54 @@
       </div>
       <PopoverGroup class="hidden lg:flex lg:gap-x-8">
         <a
-          href="#"
+          href="#beranda"
+          @click.prevent="scrollToSection('beranda')"
           :class="[
             isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-200',
             'text-sm font-medium transition-colors duration-300',
+            activeSection === 'beranda' ? 'border-b-2 border-blue-500' : '',
           ]"
           >Beranda</a
         >
-        <Popover class="relative">
-          <PopoverButton
-            :class="[
-              isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-200',
-              'flex items-center gap-x-1 text-sm font-medium transition-colors duration-300',
-            ]"
-          >
-            Layanan
-            <ChevronDownIcon
-              class="size-5 flex-none transition-colors duration-300"
-              :class="isScrolled ? 'text-gray-400' : 'text-white'"
-              aria-hidden="true"
-            />
-          </PopoverButton>
-          <transition
-            enter-active-class="transition ease-out duration-200"
-            enter-from-class="opacity-0 translate-y-1"
-            enter-to-class="opacity-100 translate-y-0"
-            leave-active-class="transition ease-in duration-150"
-            leave-from-class="opacity-100 translate-y-0"
-            leave-to-class="opacity-0 translate-y-1"
-          >
-            <PopoverPanel
-              class="absolute left-1/2 z-10 mt-3 w-56 -translate-x-1/2 overflow-hidden rounded-xl bg-white shadow-lg ring-1 ring-gray-900/5"
-            >
-              <div class="py-2">
-                <a href="#" class="block px-6 py-3 text-sm text-gray-900 hover:bg-gray-50"
-                  >Videografi Udara</a
-                >
-                <a href="#" class="block px-6 py-3 text-sm text-gray-900 hover:bg-gray-50"
-                  >Fotografi Udara</a
-                >
-                <a href="#" class="block px-6 py-3 text-sm text-gray-900 hover:bg-gray-50"
-                  >Sewa Drone & Pilot</a
-                >
-              </div>
-            </PopoverPanel>
-          </transition>
-        </Popover>
         <a
-          href="#"
+          href="#layanan"
+          @click.prevent="scrollToSection('layanan')"
           :class="[
             isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-200',
             'text-sm font-medium transition-colors duration-300',
+            activeSection === 'layanan' ? 'border-b-2 border-blue-500' : '',
+          ]"
+          >Layanan</a
+        >
+        <a
+          href="#portfolio"
+          @click.prevent="scrollToSection('portfolio')"
+          :class="[
+            isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-200',
+            'text-sm font-medium transition-colors duration-300',
+            activeSection === 'portfolio' ? 'border-b-2 border-blue-500' : '',
           ]"
           >Portfolio</a
         >
         <a
-          href="#"
+          href="#testimoni"
+          @click.prevent="scrollToSection('testimoni')"
           :class="[
             isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-200',
             'text-sm font-medium transition-colors duration-300',
+            activeSection === 'testimoni' ? 'border-b-2 border-blue-500' : '',
           ]"
           >Testimoni</a
         >
         <a
-          href="#"
+          href="#faq"
+          @click.prevent="scrollToSection('faq')"
           :class="[
             isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-200',
             'text-sm font-medium transition-colors duration-300',
+            activeSection === 'faq' ? 'border-b-2 border-blue-500' : '',
           ]"
           >FAQ</a
-        >
-        <a
-          href="#"
-          :class="[
-            isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-200',
-            'text-sm font-medium transition-colors duration-300',
-          ]"
-          >Kontak</a
         >
       </PopoverGroup>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-3">
@@ -119,12 +93,12 @@
           <!-- User dropdown menu -->
           <Menu as="div" class="relative">
             <MenuButton class="flex items-center gap-2 outline-none">
-              <div 
-                v-if="userData?.avatar" 
+              <div
+                v-if="userData && userData.avatar"
                 class="w-8 h-8 rounded-full bg-cover bg-center"
                 :style="{ backgroundImage: `url(${userData.avatar})` }"
               ></div>
-              <div 
+              <div
                 v-else
                 class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold"
               >
@@ -136,14 +110,14 @@
                   'text-sm font-semibold transition-colors duration-300',
                 ]"
               >
-                {{ userData?.name || 'My Account' }}
+                {{ (userData && userData.name) || 'My Account' }}
               </span>
-              <ChevronDownIcon 
+              <ChevronDownIcon
                 :class="[
                   isScrolled ? 'text-gray-500' : 'text-white',
                   'w-4 h-4 transition-colors duration-300',
-                ]" 
-                aria-hidden="true" 
+                ]"
+                aria-hidden="true"
               />
             </MenuButton>
             <transition
@@ -154,32 +128,33 @@
               leave-from-class="transform opacity-100 scale-100"
               leave-to-class="transform opacity-0 scale-95"
             >
-              <MenuItems 
+              <MenuItems
                 class="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-50"
               >
                 <div class="px-1 py-1">
                   <MenuItem v-slot="{ active }">
                     <router-link
-                      :to="userData?.role === 'admin' ? '/admin' : '/user/dashboard'"
+                      :to="userData && userData.role === 'admin' ? '/admin' : '/user/dashboard'"
                       :class="[
                         active ? 'bg-blue-50 text-blue-900' : 'text-gray-700',
                         'group flex w-full items-center px-4 py-2 text-sm rounded-md',
                       ]"
                     >
-                      <UserCircleIcon class="mr-3 h-5 w-5 text-gray-500" />
+                      <Home class="mr-3 h-5 w-5 text-gray-500" />
                       Dashboard
                     </router-link>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
                     <router-link
-                      to="/user/profile"
+                      v-if="userData && userData.role === 'user'"
+                      to="/user/orders"
                       :class="[
                         active ? 'bg-blue-50 text-blue-900' : 'text-gray-700',
                         'group flex w-full items-center px-4 py-2 text-sm rounded-md',
                       ]"
                     >
-                      <UserCircleIcon class="mr-3 h-5 w-5 text-gray-500" />
-                      Profile
+                      <ListChecks class="mr-3 h-5 w-5 text-gray-500" />
+                      Riwayat Pesanan
                     </router-link>
                   </MenuItem>
                 </div>
@@ -192,7 +167,7 @@
                         'group flex w-full items-center px-4 py-2 text-sm rounded-md',
                       ]"
                     >
-                      <ArrowRightOnRectangleIcon class="mr-3 h-5 w-5" />
+                      <LogOut class="mr-3 h-5 w-5" />
                       Logout
                     </button>
                   </MenuItem>
@@ -203,7 +178,7 @@
         </template>
         <template v-else>
           <router-link
-            :to="{ name: 'login', query: { redirect: $route.fullPath } }"
+            :to="{ name: 'login', query: { redirect: route.fullPath } }"
             :class="[
               isScrolled ? 'text-gray-900 hover:text-blue-600' : 'text-white hover:text-blue-200',
               'text-sm font-semibold transition-colors duration-300',
@@ -221,7 +196,11 @@
         class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10"
       >
         <div class="flex items-center justify-between">
-          <router-link to="/" class="-m-1.5 p-1.5 flex items-center gap-2" @click="mobileMenuOpen = false">
+          <router-link
+            to="/"
+            class="-m-1.5 p-1.5 flex items-center gap-2"
+            @click="mobileMenuOpen = false"
+          >
             <img :src="logoBlack" alt="FlyWithUs" class="h-8 w-auto" />
           </router-link>
           <button
@@ -276,11 +255,19 @@
             <div class="py-6">
               <template v-if="isAuthenticated">
                 <router-link
-                  :to="userData?.role === 'admin' ? '/admin' : '/user/dashboard'"
+                  :to="userData && userData.role === 'admin' ? '/admin' : '/user/dashboard'"
                   @click="mobileMenuOpen = false"
                   class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   Dashboard
+                </router-link>
+                <router-link
+                  v-if="userData && userData.role === 'user'"
+                  to="/user/orders"
+                  @click="mobileMenuOpen = false"
+                  class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                >
+                  Riwayat Pesanan
                 </router-link>
                 <router-link
                   to="/user/profile"
@@ -290,7 +277,7 @@
                   Profile
                 </router-link>
                 <button
-                  @click="handleLogout; mobileMenuOpen = false"
+                  @click="handleLogoutAndCloseMenu"
                   class="w-full text-left -mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-red-600 hover:bg-red-50"
                 >
                   Logout
@@ -298,7 +285,7 @@
               </template>
               <template v-else>
                 <router-link
-                  :to="{ name: 'login', query: { redirect: $route.fullPath } }"
+                  :to="{ name: 'login', query: { redirect: route.fullPath } }"
                   @click="mobileMenuOpen = false"
                   class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
@@ -320,8 +307,8 @@
   </header>
 </template>
 
-<script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted, computed, nextTick, inject } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import api from '@/plugins/axios'
 import logoWhite from '@/assets/flywithus.png'
@@ -344,14 +331,22 @@ import {
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import { UserCircleIcon, ArrowRightOnRectangleIcon } from '@heroicons/vue/24/solid'
+import { Home, ListChecks, User, LogOut } from 'lucide-vue-next'
+
+interface UserData {
+  avatar?: string
+  name?: string
+  role?: string
+}
 
 const mobileMenuOpen = ref(false)
 const isScrolled = ref(false)
-const userData = ref(null)
+const userData = ref<UserData | null>(null)
 const loading = ref(false)
-const error = ref(null)
+const error = ref<string | null>(null)
 const router = useRouter()
 const route = useRoute()
+const activeSection = inject('activeSection', ref('beranda'))
 
 // Computed properties
 const isAuthenticated = computed(() => {
@@ -366,17 +361,18 @@ const userInitial = computed(() => {
 // Methods
 async function fetchUserData() {
   if (!isAuthenticated.value) return
-  
+
   try {
     loading.value = true
     const response = await api.get('/me')
     userData.value = response.data
     localStorage.setItem('user_data', JSON.stringify(response.data))
   } catch (err) {
-    console.error('Failed to fetch user data:', err)
-    if (err.response?.status === 401) {
-      // Token expired or invalid
-      handleLogout()
+    if (err instanceof Error) {
+      error.value =
+        (err as any)?.response?.data?.message || err.message || 'Gagal memuat data user.'
+    } else {
+      error.value = 'Gagal memuat data user.'
     }
   } finally {
     loading.value = false
@@ -407,7 +403,7 @@ async function handleLogout() {
     localStorage.removeItem('token')
     localStorage.removeItem('user_data')
     userData.value = null
-    
+
     // Redirect to login with redirect back if needed
     const currentPath = route.fullPath
     if (currentPath !== '/login' && currentPath !== '/register') {
@@ -418,13 +414,31 @@ async function handleLogout() {
   }
 }
 
+// Helper function for mobile menu logout
+async function handleLogoutAndCloseMenu() {
+  await handleLogout()
+  mobileMenuOpen.value = false
+}
+
+function scrollToSection(sectionId: string) {
+  // Ganti '/user/dashboard' sesuai path dashboard user Anda
+  if (route.path === '/user/dashboard' || route.path === '/') {
+    nextTick(() => {
+      const el = document.getElementById(sectionId)
+      if (el) el.scrollIntoView({ behavior: 'smooth' })
+    })
+  } else {
+    router.push({ path: '/user/dashboard', hash: `#${sectionId}` })
+  }
+}
+
 // Lifecycle hooks
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
   window.addEventListener('storage', updateUserData)
   handleScroll()
   updateUserData()
-  
+
   // Fetch fresh user data if authenticated
   if (isAuthenticated.value) {
     fetchUserData()

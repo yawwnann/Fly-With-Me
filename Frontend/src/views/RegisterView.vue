@@ -109,21 +109,20 @@ const register = async () => {
 
   try {
     const res = await api.post('/register', {
-      first_name: firstName.value,
-      last_name: lastName.value,
+      name: `${firstName.value} ${lastName.value}`.trim(),
       email: email.value,
       password: password.value,
     })
-    localStorage.setItem('token', res.data.token)
-    // Redirect sesuai role
-    const role = res.data.user.role
-    if (role === 'admin') {
-      router.push('/admin')
-    } else {
-      router.push('/user')
-    }
+    // Tampilkan modal sukses
+    window.alert('Pendaftaran berhasil! Silakan login untuk melanjutkan.')
+    router.push('/login')
   } catch (e: any) {
-    error.value = e.response?.data?.error || 'Registration failed'
+    // Tampilkan error validasi backend jika ada
+    if (e.response?.data?.errors) {
+      error.value = Object.values(e.response.data.errors).flat().join(', ')
+    } else {
+      error.value = e.response?.data?.error || 'Registration failed'
+    }
   }
 }
 </script>

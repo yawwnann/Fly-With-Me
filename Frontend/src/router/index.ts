@@ -43,21 +43,25 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
-      meta: { requiresAuth: false },
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue'),
-      meta: { requiresAuth: false },
+      redirect: '/login',
     },
     {
       path: '/login',
       name: 'login',
       component: LoginView,
       meta: { requiresGuest: true },
+    },
+    {
+      path: '/user/dashboard',
+      name: 'UserDashboard',
+      component: UserDashboard,
+      meta: { requiresAuth: true, role: 'user' },
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: () => import('../views/AboutView.vue'),
+      meta: { requiresAuth: false },
     },
     {
       path: '/register',
@@ -73,45 +77,49 @@ const router = createRouter({
     // Admin routes
     {
       path: '/admin',
-      component: AdminLayout,
+      redirect: '/admin/login',
+    },
+    {
+      path: '/admin/login',
+      name: 'admin-login',
+      component: LoginView,
+      meta: { requiresGuest: true, admin: true },
+    },
+    {
+      path: '/admin/dashboard',
+      name: 'AdminDashboard',
+      component: AdminDashboard,
       meta: { requiresAuth: true, role: 'admin' },
-      children: [
-        {
-          path: '',
-          name: 'admin-dashboard',
-          component: AdminDashboard,
-        },
-        {
-          path: 'orders',
-          name: 'admin-orders',
-          component: AdminOrders,
-        },
-        {
-          path: 'portfolios',
-          name: 'admin-portfolios',
-          component: Portfolios,
-        },
-        {
-          path: 'users',
-          name: 'admin-users',
-          component: Users,
-        },
-        {
-          path: 'packages',
-          name: 'admin-packages',
-          component: Packages,
-        },
-        {
-          path: 'analytics',
-          name: 'admin-analytics',
-          component: Analytics,
-        },
-        {
-          path: 'orders/new',
-          name: 'admin-orders-new',
-          component: OrdersNew,
-        },
-      ],
+    },
+    {
+      path: '/admin/orders',
+      name: 'admin-orders',
+      component: AdminOrders,
+    },
+    {
+      path: '/admin/portfolios',
+      name: 'admin-portfolios',
+      component: Portfolios,
+    },
+    {
+      path: '/admin/users',
+      name: 'admin-users',
+      component: Users,
+    },
+    {
+      path: '/admin/packages',
+      name: 'admin-packages',
+      component: Packages,
+    },
+    {
+      path: '/admin/analytics',
+      name: 'admin-analytics',
+      component: Analytics,
+    },
+    {
+      path: '/admin/orders/new',
+      name: 'admin-orders-new',
+      component: OrdersNew,
     },
     // User routes
     {
@@ -153,20 +161,9 @@ const router = createRouter({
       ],
     },
     {
-      path: '/user/orders',
-      name: 'UserOrdersHistory',
-      component: Orders,
-      meta: { requiresAuth: true, role: 'user' },
-    },
-    {
       path: '/user/checkout/:packageId',
       name: 'UserCheckout',
       component: Checkout,
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: LoginView,
     },
     {
       path: '/register',
@@ -178,52 +175,52 @@ const router = createRouter({
       name: 'logout',
       component: LogoutView,
     },
+    // Redirect /user/dashboard ke /
+    {
+      path: '/user/dashboard',
+      redirect: '/',
+    },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: 'smooth',
+      }
+    }
+    return { top: 0 }
+  },
 })
 
 // Navigation guard
 router.beforeEach((to, from, next) => {
-  // Skip guard for the next navigation and for the initial navigation
-  if (to.redirectedFrom) {
-    return next()
-  }
-
-  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
-  const requiresGuest = to.matched.some((record) => record.meta.requiresGuest)
-  const requiredRole = to.meta.role as string | undefined
   const isAuth = isAuthenticated()
   const userRole = isAuth ? getUserRole() : null
 
-  // Jika mencoba mengakses halaman yang memerlukan auth tapi belum login
-  if (requiresAuth && !isAuth) {
-    // Jika mencoba mengakses halaman yang memerlukan auth tapi belum login
-    // Simpan path yang dituju untuk redirect setelah login
-    return next({
-      name: 'login',
-      query: { redirect: to.fullPath !== '/' ? to.fullPath : undefined },
-    })
+  // USER: Jika sudah login dan akses /login, redirect ke dashboard user
+  if (to.path === '/login' && isAuth && userRole === 'user') {
+    return next({ path: '/user/dashboard' })
+  }
+  // USER: Jika butuh auth dan belum login, redirect ke /login
+  if (
+    to.matched.some((record) => record.meta.requiresAuth && record.meta.role === 'user') &&
+    (!isAuth || userRole !== 'user')
+  ) {
+    return next({ path: '/login' })
   }
 
-  // Jika sudah login tapi mencoba mengakses halaman guest (seperti login/register)
-  if (requiresGuest && isAuth) {
-    // Redirect ke dashboard berdasarkan role
-    const redirectPath = userRole === 'admin' ? '/admin' : '/user/dashboard'
-    return next(redirectPath)
+  // ADMIN: Jika sudah login dan akses /admin/login, redirect ke dashboard admin
+  if (to.path === '/admin/login' && isAuth && userRole === 'admin') {
+    return next({ path: '/admin/dashboard' })
+  }
+  // ADMIN: Jika butuh auth dan belum login, redirect ke /admin/login
+  if (
+    to.matched.some((record) => record.meta.requiresAuth && record.meta.role === 'admin') &&
+    (!isAuth || userRole !== 'admin')
+  ) {
+    return next({ path: '/admin/login' })
   }
 
-  // Jika route memerlukan role tertentu
-  if (requiredRole && isAuth) {
-    if (userRole !== requiredRole) {
-      // Jika role tidak sesuai, arahkan ke dashboard yang sesuai
-      const redirectPath = userRole === 'admin' ? '/admin' : '/user/dashboard'
-      // Cegah infinite loop dengan memeriksa apakah kita sudah berada di halaman redirect
-      if (to.path !== redirectPath) {
-        return next(redirectPath)
-      }
-    }
-  }
-
-  // Jika semua pengecekan lolos, lanjutkan navigasi
   next()
 })
 

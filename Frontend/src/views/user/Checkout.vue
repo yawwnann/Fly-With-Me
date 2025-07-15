@@ -17,40 +17,6 @@
           </svg>
           Kembali
         </button>
-
-        <nav class="flex-1 max-w-2xl">
-          <ol class="flex items-center justify-between w-full">
-            <li class="flex-1">
-              <div class="flex items-center">
-                <span
-                  class="flex items-center justify-center w-8 h-8 text-xs rounded-full bg-blue-600 text-white font-medium"
-                  >1</span
-                >
-                <span class="ml-2 text-xs sm:text-sm font-medium text-gray-900">Pilih Paket</span>
-                <div class="flex-1 ml-4 h-0.5 bg-blue-600"></div>
-              </div>
-            </li>
-            <li class="flex-1 flex items-center">
-              <div class="flex items-center px-2 sm:px-4">
-                <span
-                  class="flex items-center justify-center w-8 h-8 text-xs rounded-full bg-blue-600 text-white font-medium"
-                  >2</span
-                >
-                <span class="ml-2 text-xs sm:text-sm font-medium text-gray-900">Checkout</span>
-              </div>
-              <div class="flex-1 h-0.5 bg-gray-300"></div>
-            </li>
-            <li class="flex-1 flex ml-4">
-              <div class="flex items-center">
-                <span
-                  class="flex items-center justify-center w-8 h-8 text-xs rounded-full border-2 border-gray-300 text-gray-500 font-medium"
-                  >3</span
-                >
-                <span class="ml-2 text-xs sm:text-sm font-medium text-gray-500">Pembayaran</span>
-              </div>
-            </li>
-          </ol>
-        </nav>
       </div>
 
       <div class="bg-white rounded-2xl shadow-lg overflow-hidden">

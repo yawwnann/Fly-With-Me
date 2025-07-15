@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen p-4 sm:p-6 lg:p-8 lg:pl-[280px] font-sans">
+  <Sidebar class="w-64 hidden lg:block" />
+  <div class="min-h-screen p-4 sm:p-6 lg:p-8 font-sans">
     <div class="max-w-7xl mx-auto">
       <div class="mb-8">
         <h1 class="text-4xl font-bold text-slate-900 mb-2">Manajemen Paket</h1>
@@ -223,6 +224,7 @@ import api from '@/api'
 const packages = ref([])
 const loading = ref(true)
 const error = ref('')
+import Sidebar from '@/views/admin/components/layout/Sidebar.vue'
 
 onMounted(async () => {
   loading.value = true

@@ -1,10 +1,42 @@
 <template>
-  <div class="min-h-screen p-4 sm:p-6 lg:p-8 lg:pl-[280px] font-sans text-slate-800">
-    <div class="max-w-7xl mx-auto">
+  <div class="flex min-h-screen">
+    <Sidebar class="w-64 hidden lg:block" />
+    <div class="flex-1 lg:pl-20 lg:pt-10 lg:pr-20">
       <!-- Header -->
-      <div class="mb-8">
-        <h1 class="text-4xl font-bold text-slate-900 mb-2">Orders</h1>
-        <p class="text-slate-500">Kelola dan pantau semua pesanan Anda</p>
+      <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 class="text-4xl font-bold text-slate-900 mb-2">Orders</h1>
+          <p class="text-slate-500">Kelola dan pantau semua pesanan Anda</p>
+        </div>
+        <button
+          @click="
+            editingOrder = {
+              id: '',
+              name: '',
+              contact: '',
+              package_name: '',
+              package: { name: '' },
+              date: '',
+              location: '',
+              status: '',
+              payment_status: '',
+              total_price: 0,
+            }
+          "
+          class="group relative px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+        >
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4v16m8-8H4"
+              />
+            </svg>
+            Tambahkan Pesanan
+          </span>
+        </button>
       </div>
 
       <!-- Stats Cards -->
@@ -295,7 +327,14 @@
                   >
                     Edit
                   </button>
+                  <button
+                    @click="confirmDeleteOrder(order)"
+                    class="flex-1 bg-red-50 text-red-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors"
+                  >
+                    Hapus
+                  </button>
                 </div>
+                <!-- Tambahkan penutup div di sini untuk flex tombol -->
               </div>
             </div>
           </div>
@@ -427,6 +466,12 @@
                       >
                         Edit
                       </button>
+                      <button
+                        @click="confirmDeleteOrder(order)"
+                        class="text-red-600 hover:text-red-900 transition-colors"
+                      >
+                        Hapus
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -436,122 +481,122 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Detail Modal -->
-    <div
-      v-if="selectedOrder"
-      class="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4"
-    >
-      <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="p-6 border-b border-gray-200">
-          <div class="flex justify-between items-center">
-            <h3 class="text-lg font-semibold text-gray-900">Detail Order</h3>
-            <button @click="selectedOrder = null" class="text-gray-400 hover:text-gray-600">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                ></path>
-              </svg>
-            </button>
-          </div>
+  <!-- Detail Modal -->
+  <div
+    v-if="selectedOrder"
+    class="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4"
+  >
+    <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex justify-between items-center">
+          <h3 class="text-lg font-semibold text-gray-900">Detail Order</h3>
+          <button @click="selectedOrder = null" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
         </div>
+      </div>
 
-        <div class="p-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 class="font-medium text-gray-900 mb-4">Informasi Customer</h4>
-              <div class="space-y-3">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">Nama</label>
-                  <p class="text-sm text-gray-900">{{ selectedOrder.name }}</p>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">Kontak</label>
-                  <p class="text-sm text-gray-900">{{ selectedOrder.contact }}</p>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">Lokasi</label>
-                  <p class="text-sm text-gray-900">{{ selectedOrder.location }}</p>
-                </div>
+      <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h4 class="font-medium text-gray-900 mb-4">Informasi Customer</h4>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Nama</label>
+                <p class="text-sm text-gray-900">{{ selectedOrder.name }}</p>
               </div>
-            </div>
-
-            <div>
-              <h4 class="font-medium text-gray-900 mb-4">Informasi Order</h4>
-              <div class="space-y-3">
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">Paket</label>
-                  <p class="text-sm text-gray-900">
-                    {{
-                      selectedOrder.package_name ||
-                      (selectedOrder.package && selectedOrder.package.name) ||
-                      '-'
-                    }}
-                  </p>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">Tanggal</label>
-                  <p class="text-sm text-gray-900">{{ formatDate(selectedOrder.date) }}</p>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">Status</label>
-                  <span
-                    :class="[
-                      'inline-block px-3 py-1 rounded-full text-xs font-semibold',
-                      {
-                        'bg-yellow-100 text-yellow-700': selectedOrder.status === 'pending',
-                        'bg-blue-100 text-blue-700': selectedOrder.status === 'confirmed',
-                        'bg-green-100 text-green-700': selectedOrder.status === 'completed',
-                        'bg-red-100 text-red-700': selectedOrder.status === 'cancelled',
-                      },
-                    ]"
-                  >
-                    {{ selectedOrder.status }}
-                  </span>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">Payment Status</label>
-                  <span
-                    :class="[
-                      'inline-block px-3 py-1 rounded-full text-xs font-semibold',
-                      {
-                        'bg-green-100 text-green-700': selectedOrder.payment_status === 'paid',
-                        'bg-red-100 text-red-700': selectedOrder.payment_status === 'unpaid',
-                        'bg-yellow-100 text-yellow-700': selectedOrder.payment_status === 'partial',
-                      },
-                    ]"
-                  >
-                    {{ selectedOrder.payment_status }}
-                  </span>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-gray-700">Total</label>
-                  <p class="text-lg font-bold text-gray-900">
-                    Rp{{ Number(selectedOrder.total_price).toLocaleString() }}
-                  </p>
-                </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Kontak</label>
+                <p class="text-sm text-gray-900">{{ selectedOrder.contact }}</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Lokasi</label>
+                <p class="text-sm text-gray-900">{{ selectedOrder.location }}</p>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
-          <button
-            @click="selectedOrder = null"
-            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
-          >
-            Tutup
-          </button>
-          <button
-            @click="editOrder(selectedOrder)"
-            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-          >
-            Edit Order
-          </button>
+          <div>
+            <h4 class="font-medium text-gray-900 mb-4">Informasi Order</h4>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Paket</label>
+                <p class="text-sm text-gray-900">
+                  {{
+                    selectedOrder.package_name ||
+                    (selectedOrder.package && selectedOrder.package.name) ||
+                    '-'
+                  }}
+                </p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Tanggal</label>
+                <p class="text-sm text-gray-900">{{ formatDate(selectedOrder.date) }}</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Status</label>
+                <span
+                  :class="[
+                    'inline-block px-3 py-1 rounded-full text-xs font-semibold',
+                    {
+                      'bg-yellow-100 text-yellow-700': selectedOrder.status === 'pending',
+                      'bg-blue-100 text-blue-700': selectedOrder.status === 'confirmed',
+                      'bg-green-100 text-green-700': selectedOrder.status === 'completed',
+                      'bg-red-100 text-red-700': selectedOrder.status === 'cancelled',
+                    },
+                  ]"
+                >
+                  {{ selectedOrder.status }}
+                </span>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Payment Status</label>
+                <span
+                  :class="[
+                    'inline-block px-3 py-1 rounded-full text-xs font-semibold',
+                    {
+                      'bg-green-100 text-green-700': selectedOrder.payment_status === 'paid',
+                      'bg-red-100 text-red-700': selectedOrder.payment_status === 'unpaid',
+                      'bg-yellow-100 text-yellow-700': selectedOrder.payment_status === 'partial',
+                    },
+                  ]"
+                >
+                  {{ selectedOrder.payment_status }}
+                </span>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">Total</label>
+                <p class="text-lg font-bold text-gray-900">
+                  Rp{{ Number(selectedOrder.total_price).toLocaleString() }}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+        <button
+          @click="selectedOrder = null"
+          class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+        >
+          Tutup
+        </button>
+        <button
+          @click="editOrder(selectedOrder)"
+          class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+        >
+          Edit Order
+        </button>
       </div>
     </div>
   </div>
@@ -559,9 +604,9 @@
   <!-- Modal Edit Order -->
   <div
     v-if="editingOrder"
-    class="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4"
+    class="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4"
   >
-    <div class="bg-white rounded-lg max-w-lg w-full max-h-[90vh] overflow-y-auto">
+    <div class="bg-white rounded-lg max-w-full w-full sm:max-w-lg max-h-[90vh] overflow-y-auto">
       <div class="p-6 border-b border-gray-200 flex justify-between items-center">
         <h3 class="text-lg font-semibold text-gray-900">Edit Order</h3>
         <button @click="editingOrder = null" class="text-gray-400 hover:text-gray-600">
@@ -648,6 +693,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import api from '@/api'
+import Sidebar from './components/layout/Sidebar.vue'
 
 interface Order {
   id: string
@@ -703,7 +749,13 @@ const filteredOrders = computed(() => {
     filtered = filtered.filter((order) => order.payment_status === paymentFilter.value)
   }
 
-  return filtered
+  // Urutkan lagi jika perlu
+  return [...filtered].sort((a, b) => {
+    if (a.date && b.date) {
+      return new Date(b.date).getTime() - new Date(a.date).getTime()
+    }
+    return Number(b.id) - Number(a.id)
+  })
 })
 
 const completedOrders = computed(
@@ -718,10 +770,21 @@ const totalRevenue = computed(() =>
   orders.value.reduce((sum, order) => sum + Number(order.total_price), 0),
 )
 
+const deletingOrder = ref<Order | null>(null)
+const deleteLoading = ref(false)
+
 onMounted(async () => {
   try {
     const res = await api.get('/orders')
-    orders.value = res.data.data || res.data
+    // Urutkan data dari backend, order terbaru di atas
+    const data = res.data.data || res.data
+    orders.value = [...data].sort((a, b) => {
+      // Jika ada field date, gunakan date, jika tidak gunakan id
+      if (a.date && b.date) {
+        return new Date(b.date).getTime() - new Date(a.date).getTime()
+      }
+      return Number(b.id) - Number(a.id)
+    })
   } catch (e) {
     console.error('Gagal memuat data orders:', e)
     // Bisa tambahkan toast notification di sini
@@ -760,6 +823,26 @@ async function submitEdit() {
     // Optional: tampilkan notifikasi sukses
   } catch (e) {
     alert('Gagal update order')
+  }
+}
+
+function confirmDeleteOrder(order: Order) {
+  if (confirm(`Yakin ingin menghapus order atas nama ${order.name}?`)) {
+    deleteOrder(order)
+  }
+}
+
+async function deleteOrder(order: Order) {
+  deleteLoading.value = true
+  try {
+    await api.delete(`/orders/${order.id}`)
+    orders.value = orders.value.filter((o) => o.id !== order.id)
+    // Optional: tampilkan notifikasi sukses
+    alert('Order berhasil dihapus')
+  } catch (e) {
+    alert('Gagal menghapus order')
+  } finally {
+    deleteLoading.value = false
   }
 }
 
