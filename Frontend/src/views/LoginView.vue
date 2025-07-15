@@ -24,12 +24,10 @@
       <!-- Right Side: Login Form -->
       <div class="w-full md:w-1/2 bg-[#2a273f] p-8 flex flex-col justify-between flex-1 py-16">
         <div>
-          <h2 class="text-3xl font-bold text-white mb-6">Welcome back</h2>
+          <h2 class="text-3xl font-bold text-white mb-6">Selamat datang kembali</h2>
           <p class="text-sm text-white/60 mb-10">
-            Don't have an account?
-            <router-link to="/register" class="text-purple-400 hover:underline"
-              >Sign up</router-link
-            >
+            Belum punya akun?
+            <router-link to="/register" class="text-purple-400 hover:underline">Daftar</router-link>
           </p>
         </div>
         <form @submit.prevent="login" class="space-y-4 flex-1 flex flex-col justify-center">
@@ -43,16 +41,16 @@
           <input
             v-model="password"
             type="password"
-            placeholder="Enter your password"
+            placeholder="Masukkan kata sandi Anda"
             required
             class="w-full bg-[#232136] text-white border border-[#393552] rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           <div class="flex items-center justify-between">
             <div class="flex items-center">
               <input id="remember" type="checkbox" class="accent-purple-500 mr-2" />
-              <label for="remember" class="text-xs text-white/70">Remember me</label>
+              <label for="remember" class="text-xs text-white/70">Ingat saya</label>
             </div>
-            <a href="#" class="text-xs text-purple-400 hover:underline">Forgot password?</a>
+            <a href="#" class="text-xs text-purple-400 hover:underline">Lupa kata sandi?</a>
           </div>
           <button
             type="submit"
@@ -78,7 +76,7 @@
               </svg>
               Loading...
             </span>
-            <span v-else>Sign in</span>
+            <span v-else>Masuk</span>
           </button>
           <div v-if="error" class="text-red-400 mt-4 text-center">{{ error }}</div>
         </form>
@@ -130,8 +128,13 @@ const login = async () => {
       }
     }
     router.push(redirectPath)
-  } catch (err: any) {
-    error.value = err.response?.data?.message || 'Login failed. Please check your credentials.'
+  } catch (err: unknown) {
+    if (typeof err === 'object' && err !== null && 'response' in err) {
+      // @ts-expect-error: err.response bisa jadi dari axios
+      error.value = err.response?.data?.message || 'Gagal login. Silakan periksa kredensial Anda.'
+    } else {
+      error.value = 'Gagal login. Silakan periksa kredensial Anda.'
+    }
     console.error('Login error:', err)
   } finally {
     loading.value = false

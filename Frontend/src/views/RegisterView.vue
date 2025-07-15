@@ -23,24 +23,24 @@
       </div>
       <!-- Right Side: Register Form -->
       <div class="w-full md:w-1/2 bg-[#2a273f] p-8 flex flex-col justify-center flex-1 py-16">
-        <h2 class="text-2xl font-bold text-white mb-2">Create an account</h2>
+        <h2 class="text-2xl font-bold text-white mb-2">Buat akun</h2>
         <p class="text-sm text-white/60 mb-6">
-          Already have an account?
-          <router-link to="/login" class="text-purple-400 hover:underline">Sign in</router-link>
+          Sudah punya akun?
+          <router-link to="/login" class="text-purple-400 hover:underline">Masuk</router-link>
         </p>
         <form @submit.prevent="register" class="space-y-4">
           <div class="flex space-x-2">
             <input
               v-model="firstName"
               type="text"
-              placeholder="First name"
+              placeholder="Nama depan"
               required
               class="w-1/2 bg-[#232136] text-white border border-[#393552] rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
             <input
               v-model="lastName"
               type="text"
-              placeholder="Last name"
+              placeholder="Nama belakang"
               required
               class="w-1/2 bg-[#232136] text-white border border-[#393552] rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
@@ -55,29 +55,29 @@
           <input
             v-model="password"
             type="password"
-            placeholder="Enter your password"
+            placeholder="Masukkan kata sandi Anda"
             required
             class="w-full bg-[#232136] text-white border border-[#393552] rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           <input
             v-model="confirmPassword"
             type="password"
-            placeholder="Confirm your password"
+            placeholder="Konfirmasi kata sandi"
             required
             class="w-full bg-[#232136] text-white border border-[#393552] rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           <div class="flex items-center">
             <input id="terms" type="checkbox" class="accent-purple-500 mr-2" required />
             <label for="terms" class="text-xs text-white/70"
-              >I agree to the
-              <span class="underline cursor-pointer">Terms & Conditions</span></label
+              >Saya setuju dengan
+              <span class="underline cursor-pointer">Syarat & Ketentuan</span></label
             >
           </div>
           <button
             type="submit"
             class="w-full bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 rounded-lg transition"
           >
-            Create account
+            Buat akun
           </button>
         </form>
         <div v-if="error" class="text-red-400 mt-4 text-center">{{ error }}</div>
@@ -103,7 +103,7 @@ const register = async () => {
   error.value = ''
 
   if (password.value !== confirmPassword.value) {
-    error.value = 'Passwords do not match'
+    error.value = 'Kata sandi tidak cocok'
     return
   }
 
@@ -121,7 +121,7 @@ const register = async () => {
     if (e.response?.data?.errors) {
       error.value = Object.values(e.response.data.errors).flat().join(', ')
     } else {
-      error.value = e.response?.data?.error || 'Registration failed'
+      error.value = e.response?.data?.error || 'Gagal registrasi'
     }
   }
 }
